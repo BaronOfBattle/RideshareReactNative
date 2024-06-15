@@ -1,0 +1,34 @@
+import React from 'react';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { CustomText } from './CustomTextComponent';
+
+export function AppBar() {
+  return (
+    <View style={styles.appBar}>
+      <Image 
+        source={require("../logo.png")}
+        style={{height: 25, width: 150}}
+      />
+      <CustomText style={styles.appBarAjuda}>Precisa de Ajuda?</CustomText>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+    appBar: {
+      borderBottomWidth: 1.2,
+      borderBottomColor: "#EEE",
+      flexDirection: "row",
+      justifyContent: 'space-between',
+      padding: 30,
+      paddingTop: 50,
+      paddingBottom: 15,
+    },
+    appBarAjuda: {
+      color: "#79c61e",
+    },
+
+});
+
+
+export default AppBar;
