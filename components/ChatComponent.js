@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, TextInput } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, StyleSheet, ScrollView, TextInput } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
@@ -8,34 +8,43 @@ export function Chat({ navigation }) {
     const [mensagens, setMensagens] = useState([]);
     const [mensagemAtual, setMensagemAtual] = useState("");
 
+    const scrollViewRef = useRef();
+
     const enviarMensagem = () => {
         if (mensagemAtual.trim().length > 0) {
-            setMensagens([...mensagens, mensagemAtual]);
+            setMensagens([...mensagens, { text: mensagemAtual, isUser: true }]);
             setMensagemAtual("");
+            setTimeout(() => {
+                setMensagens(mensagens => [...mensagens, { text: "Lorem ipsum dolor sit amet...", isUser: false }]);
+                scrollViewRef.current.scrollToEnd({ animated: true });
+            }, 500);
         }
     };
 
 
     return (
         <KeyboardAwareScrollView
-    style={styles.container}
-    resetScrollToCoords={{ x: 0, y: 0 }}
-    contentContainerStyle={styles.content}
-    scrollEnabled={false}
->
+            style={styles.container}
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={styles.content}
+            scrollEnabled={false}
+        >
             <View style={styles.content}>
                 <View style={styles.info}>
                     <View style={styles.imagem}>
                     </View>
                     <CustomText style={styles.nome}>João</CustomText>
                 </View>
-                <View style={styles.mensagensView}>
-                <ScrollView style={styles.mensagens}>
+                <ScrollView 
+                ref={scrollViewRef}
+                style={styles.mensagens}>
                     {mensagens.map((msg, index) => (
-                        <CustomText style={styles.mensagemTexto} key={index}>{msg}</CustomText>
+                        <View style={msg.isUser ? styles.mensagemUsuarioBackground : styles.respostaTextoBackground} key={index}>
+                            <CustomText style={msg.isUser ? styles.mensagemUsuarioTexto : styles.respostaTexto}>{msg.text}</CustomText>
+                        </View>
                     ))}
+
                 </ScrollView>
-                </View>
                 <View style={styles.inputView}>
                     <TextInput
                         style={styles.textInput}
@@ -64,10 +73,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF"
     },
     content: {
-        padding: 30,
+        paddingHorizontal: 10,
+        flex: 1,
+        height: 100
     },
     info: {
-        alignItems: "center"
+        alignItems: "center",
+        marginTop: 10,
     },
     imagem: {
         width: 60,
@@ -77,37 +89,55 @@ const styles = StyleSheet.create({
     },
     nome: {
         color: "#043F2D",
-        marginBottom: 15, 
+        marginBottom: 15,
     },
-    mensagensView: {
-        marginBottom: 30,
-        minHeight: 400,
-        alignItems: "flex-end"
+    mensagens: {
+        marginBottom: 10,
+        paddingHorizontal: 0,
     },
-    mensagemTexto: {
-        textAlign: "right",
+    mensagemUsuarioBackground: {
+        alignSelf: "flex-end",
         backgroundColor: "#EEE",
-        borderRadius: 500,
+        borderRadius: 25,
         marginBottom: 10,
         padding: 10,
         maxWidth: 250,
     },
+    mensagemUsuarioTexto: {
+        textAlign: "right",
+    },
+    respostaTextoBackground: {
+        alignSelf: "flex-start",
+        backgroundColor: "#D3D3D3",
+        borderRadius: 25,
+        marginVertical: 20,
+        padding: 10,
+        maxWidth: 250,
+    },
+    respostaTexto: {
+        textAlign: "left",
+    },
     inputView: {
-
+        paddingHorizontal: 30,
+        alignItems: "center"
     },
     textInput: {
         backgroundColor: "#EEE",
         color: "#111",
         fontFamily: "Poppins",
         marginTop: 10,
-        paddingLeft: 20,
         paddingVertical: 10,
-        width: 330,
-        borderRadius: 150,
+        paddingHorizontal: 10,
+        paddingLeft: 20,
+        width: 380,
+        borderRadius: 20,
     },
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
+        alignItems: "center",
+        marginTop: 20,
+        marginBottom: 50,
     },
     botaoVoltar: {
         marginHorizontal: 40,
