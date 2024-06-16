@@ -13,6 +13,9 @@ export function BottomBar({ navigation }) {
     return (
         <View style={styles.bottomBar}>
             <View style={styles.navigationContainer}>
+                <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
+                    <Icon name="home" size={30} color={getColor('Inicio')} />
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('anunciarViagem')}>
                     <Icon name="directions-car" size={30} color={getColor('anunciarViagem')} />
                 </TouchableOpacity>
