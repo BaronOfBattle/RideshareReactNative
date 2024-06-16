@@ -1,4 +1,4 @@
-import React ,{ useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
@@ -24,8 +24,34 @@ import AvaliarPassageiros from './components/AvaliarPassageirosComponent';
 import AvaliarMotorista from './components/AvaliarMotoristaComponent';
 import ResumoViagem from './components/ResumoViagemComponent';
 import Chat from './components/ChatComponent';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const Tab = createBottomTabNavigator();
 
 const Stack = createStackNavigator();
+
+function HomeTabs() {
+  return (
+    <Tab.Navigator initialRouteName="Perfil">
+      <Tab.Screen name="Anunciar Viagem" component={AnunciarViagem} options={{
+        headerShown: false, tabBarIcon: ({ color, size }) => (
+          <Icon name="directions-car" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Perfil" component={Perfil} options={{
+        headerShown: false, tabBarIcon: ({ color, size }) => (
+          <Icon name="person" color={color} size={size} />
+        )
+      }} />
+      <Tab.Screen name="Chat" component={Chat} options={{
+        headerShown: false, tabBarIcon: ({ color, size }) => (
+          <Icon name="chat" color={color} size={size} />
+        )
+      }} />
+    </Tab.Navigator>
+  );
+}
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -60,7 +86,6 @@ export default function App() {
           <Stack.Screen name="termosDeSeguranca" component={TermosDeSeguranca} />
           <Stack.Screen name="cadastroMotorista" component={CadatroMotorista} />
           <Stack.Screen name="bemVindo" component={BemVindo} />
-          <Stack.Screen name="Perfil" component={Perfil} />
           <Stack.Screen name="solicitarViagem" component={SolicitarViagem} />
           <Stack.Screen name="solicitarCarona" component={SolicitarCarona} />
           <Stack.Screen name="anunciarViagem" component={AnunciarViagem} />
@@ -69,6 +94,7 @@ export default function App() {
           <Stack.Screen name="avaliar" component={AvaliarPassageiros} />
           <Stack.Screen name="avaliarMotorista" component={AvaliarMotorista} />
           <Stack.Screen name="Chat" component={Chat} />
+          <Stack.Screen name="Home" component={HomeTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     );
