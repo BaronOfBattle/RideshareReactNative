@@ -1,24 +1,32 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import { useRoute } from '@react-navigation/native';
 
 export function BottomBar({ navigation }) {
+    const route = useRoute();
+
+    const getColor = (screenName) => {
+        return route.name === screenName ? '#79c61e' : '#000';
+    };
+
     return (
         <View style={styles.bottomBar}>
             <View style={styles.navigationContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('anunciarViagem')}>
-                    <Icon name="directions-car" size={30} color="#000" />
+                    <Icon name="directions-car" size={30} color={getColor('anunciarViagem')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-                    <Icon name="person" size={30} color="#000" />
+                    <Icon name="person" size={30} color={getColor('Perfil')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
-                    <Icon name="chat" size={30} color="#000" />
+                    <Icon name="chat" size={30} color={getColor('Chat')} />
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     bottomBar: {
