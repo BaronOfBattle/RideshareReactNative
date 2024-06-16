@@ -15,6 +15,8 @@
   "author": "Equipe Rideshare TADS028",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1"
   }
 }

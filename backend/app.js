@@ -1,9 +1,28 @@
-const http = require("http");
 const express = require("express");
+path = require("path");
+bodyParser = require("body-parser");
+cors = require("cors");
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+mongoose.connect("mongodb://localhost:27017/rideshare", { useNewUrlParser: true}).then(
+    () => {console.log("Database is connected") }, 
+    err => {console.log("Can not connect to the Database " + err)});
+    
+const userRoute = require('./src/routes/userRoute');
+const companyRoute = require("./src/routes/companyRoute");
+const vehicleRoute = require("./src/routes/vehicleRoute");
 const app = express();
+app.use(bodyParser.json());
+app.use(cors());
 
+app.use('/user', userRoute);
+app.use('/company', companyRoute);
+app.use('/vehicle', vehicleRoute);
+    
 app.get("/", function(req, res) {
     res.send("<h1>Servidor rodando com ExpressJS</h1>");
 });
 
-http.createServer(app).listen(3000, () => console.log("Servidor rodando na porta 3000!"));
+app.listen(3000, function() {
+    console.log("Listening on port 3000!");
+});
