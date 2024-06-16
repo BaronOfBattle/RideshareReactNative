@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
@@ -16,7 +16,7 @@ export function AvaliarPassageiros({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView style={styles.content}>
                 <CustomText style={styles.titulo}>AVALIAR PASSAGEIROS</CustomText>
                 <View style={styles.midPassageiro}>
@@ -26,9 +26,12 @@ export function AvaliarPassageiros({ navigation }) {
                             <CustomText style={styles.infoTextCargoEmpresa}>{cargo} — {empresa}</CustomText>
                         </View>
                         <View style={styles.midPassageirosInfoImg}>
-                            <View style={styles.midPassageirosImage}>
-
-                            </View>
+                            <TouchableOpacity>
+                                <Image
+                                    source={require("../assets/fotoDocumento.jpg")}
+                                    style={styles.midPassageirosImage}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.avaliacao}>
@@ -44,26 +47,30 @@ export function AvaliarPassageiros({ navigation }) {
                             <CustomText style={styles.infoTextCargoEmpresa}>PROFESSORA - FAC SENAC</CustomText>
                         </View>
                         <View style={styles.midPassageirosInfoImg}>
-                            <View style={styles.midPassageirosImage}>
-                            </View>
+                        <TouchableOpacity>
+                                <Image
+                                    source={require("../assets/fotoDocumento.jpg")}
+                                    style={styles.midPassageirosImage}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.avaliacao}>
                         <CustomText>
-                        <StarRating totalStars={5} rating={0} onRating={(rate) => null} />
+                            <StarRating totalStars={5} rating={0} onRating={(rate) => null} />
                         </CustomText>
                     </View>
                 </View>
                 <View style={styles.continuar}>
-                <BotaoComponent
-                    texto={"Concluído"}
-                    onPress={() => { navigation.goBack() }}
-                    estilo={styles.botaoContinuar}
-                    estiloTexto={styles.botaoContinuarTexto}
-                />
-            </View>
+                    <BotaoComponent
+                        texto={"Concluído"}
+                        onPress={() => { navigation.goBack() }}
+                        estilo={styles.botaoContinuar}
+                        estiloTexto={styles.botaoContinuarTexto}
+                    />
+                </View>
             </ScrollView>
-            <BottomBar navigation={navigation}/>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
@@ -108,8 +115,8 @@ const styles = StyleSheet.create({
         borderRadius: 45,
     },
     avaliacao: {
-        flexDirection: 'row', 
-    }, 
+        flexDirection: 'row',
+    },
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",

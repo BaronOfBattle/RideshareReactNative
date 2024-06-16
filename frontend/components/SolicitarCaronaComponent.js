@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
@@ -36,11 +36,15 @@ export function SolicitarCarona({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView>
                 <View style={styles.top}>
-                    <View style={styles.topImage}>
-                    </View>
+                    <TouchableOpacity>
+                        <Image
+                            source={require("../assets/fotoPerfil.jpg")}
+                            style={styles.topImage}
+                        />
+                    </TouchableOpacity>
                     <View style={styles.topInfo}>
                         <CustomText style={styles.topInfoText}>{nome}</CustomText>
                         <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
@@ -67,20 +71,20 @@ export function SolicitarCarona({ navigation }) {
                         estiloTexto={styles.solicitarCaronaTexto}
                     />
                     <BotaoComponent
-                        texto={confirmacao === 2 ? "ENVIE UMA MENSAGEM ": "VOLTAR"}
+                        texto={confirmacao === 2 ? "ENVIE UMA MENSAGEM " : "VOLTAR"}
                         onPress={() => {
                             if (confirmacao === 2) {
-                              navigation.navigate('Chat');
+                                navigation.navigate('Chat');
                             } else {
-                              navigation.navigate('solicitarViagem');
+                                navigation.navigate('solicitarViagem');
                             }
-                          }}
+                        }}
                         estilo={styles.botaoVoltar}
                         estiloTexto={styles.voltarTexto}
                     />
                 </View>
             </ScrollView>
-            <BottomBar navigation={navigation}/>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
@@ -169,7 +173,7 @@ const styles = StyleSheet.create({
     botaoVoltar: {
         marginHorizontal: 40,
         backgroundColor: "#CDE5B0",
-        marginBottom: 80, 
+        marginBottom: 80,
     },
     voltarTexto: {
         color: "#000",

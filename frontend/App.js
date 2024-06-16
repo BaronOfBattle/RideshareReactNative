@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
-import AppBar from './components/AppBarComponent';
+import { UserProvider } from './components/UserContext';
 import LoginComponent from './components/LoginComponent';
 import CadastroComponent from './components/cadastro/CadastroComponent';
 import { ConfirmarEmailComponent } from './components/cadastro/CadastroConfirmarEmailComponent';
@@ -46,6 +46,7 @@ export default function App() {
     return null;
   } else {
     return (
+      <UserProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginComponent} />
@@ -71,6 +72,7 @@ export default function App() {
           <Stack.Screen name="Inicio" component={Inicio} />
         </Stack.Navigator>
       </NavigationContainer>
+      </UserProvider>
     );
   }
 }

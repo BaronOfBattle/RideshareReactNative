@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, ScrollView, TextInput } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
@@ -31,16 +31,20 @@ export function Chat({ navigation }) {
             contentContainerStyle={styles.content}
             scrollEnabled={false}
         >
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <View style={styles.content}>
                 <View style={styles.info}>
-                    <View style={styles.imagem}>
-                    </View>
+                    <TouchableOpacity>
+                        <Image
+                            source={require("../assets/fotoCNH.jpg")}
+                            style={styles.imagem}
+                        />
+                    </TouchableOpacity>
                     <CustomText style={styles.nome}>João</CustomText>
                 </View>
-                <ScrollView 
-                ref={scrollViewRef}
-                style={styles.mensagens}>
+                <ScrollView
+                    ref={scrollViewRef}
+                    style={styles.mensagens}>
                     {mensagens.map((msg, index) => (
                         <View style={msg.isUser ? styles.mensagemUsuarioBackground : styles.respostaTextoBackground} key={index}>
                             <CustomText style={msg.isUser ? styles.mensagemUsuarioTexto : styles.respostaTexto}>{msg.text}</CustomText>
@@ -66,8 +70,8 @@ export function Chat({ navigation }) {
                     estiloTexto={styles.voltarTexto}
                 />
             </View>*/}
-            <View style={{alignItems: "center"}}>
-            <BottomBar navigation={navigation} />
+            <View style={{ alignItems: "center" }}>
+                <BottomBar navigation={navigation} />
             </View>
         </KeyboardAwareScrollView>
     );
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     inputView: {
         paddingHorizontal: 30,
         alignItems: "center",
-        marginBottom: 80, 
+        marginBottom: 80,
     },
     textInput: {
         backgroundColor: "#EEE",

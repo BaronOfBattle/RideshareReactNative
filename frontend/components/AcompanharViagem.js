@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
@@ -26,12 +26,12 @@ export function AcompanharViagem({ navigation, showAppBar = true }) {
 
     return (
         <View style={styles.container}>
-            { showAppBar && <AppBar imgPerfil={true} menu={true}/>}
+            {showAppBar && <AppBar imgPerfil={true} menu={true} />}
             <ScrollView>
                 <View style={styles.top}>
                     <BotaoComponent
                         texto={"INICIAR VIAGEM"}
-                        onPress={() => { navigation.navigate('resumoViagem')}}
+                        onPress={() => { navigation.navigate('resumoViagem') }}
                         estilo={styles.botaoSolicitarCarona}
                         estiloTexto={styles.solicitarCaronaTexto}
                     />
@@ -55,9 +55,12 @@ export function AcompanharViagem({ navigation, showAppBar = true }) {
                                 <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
                                 <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>
                             </View>
-                            <View style={styles.midPassageirosImage}>
-
-                            </View>
+                            <TouchableOpacity>
+                                <Image
+                                    source={require("../assets/fotoDocumento.jpg")}
+                                    style={styles.midPassageirosImage}
+                                />
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.continuar}>
                             <BotaoComponent
@@ -82,8 +85,12 @@ export function AcompanharViagem({ navigation, showAppBar = true }) {
                                 <CustomText style={styles.topInfoText}>PROFESSORA - FAC SENAC</CustomText>
                                 <CustomText style={styles.topInfoText}>4.8</CustomText>
                             </View>
-                            <View style={styles.midPassageirosImage}>
-                            </View>
+                            <TouchableOpacity>
+                                <Image
+                                    source={require("../assets/fotoDocumento.jpg")}
+                                    style={styles.midPassageirosImage}
+                                />
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.continuar}>
                             <BotaoComponent
@@ -103,7 +110,7 @@ export function AcompanharViagem({ navigation, showAppBar = true }) {
                     </View>
                 </View>
             </ScrollView>
-            <BottomBar navigation={navigation}/>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
@@ -126,7 +133,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
         padding: 3,
-        fontFamily: 'Poppins', 
+        fontFamily: 'Poppins',
     },
     topInfoTextTipoValor: {
         color: "#79c61e",
@@ -168,7 +175,7 @@ const styles = StyleSheet.create({
     },
     midViagemTextoVagas: {
         fontSize: 13,
-        fontFamily: 'Poppins', 
+        fontFamily: 'Poppins',
     },
     tituloBottom: {
         color: "#79c61e",
@@ -176,7 +183,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 3,
         marginTop: 20,
-        fontFamily: 'Poppins', 
+        fontFamily: 'Poppins',
     },
     midPassageiros: {
         backgroundColor: "#EEE",

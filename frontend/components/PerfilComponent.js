@@ -1,5 +1,6 @@
-import React from "react";
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import React, { useContext } from "react";
+import { View, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import { UserContext } from './UserContext';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import { useCustomBackButton } from "./CustomBackButtonComponent";
@@ -8,21 +9,27 @@ import BottomBar from './BottomBarComponent';
 
 export function Perfil({ navigation }) {
     useCustomBackButton(navigation);
+    const { user } = useContext(UserContext);
 
-    const nome = 'João Silva';
+    const nome = user.fullName;
     const avaliacao = '4.8';
     const cargo = 'Professor';
     const empresa = 'FAC SENAC';
     const corridas = '56';
     const caronas = '6';
+    const fotoPerfil = user.profilePictureAddres;
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView>
                 <View style={styles.top}>
-                    <View style={styles.topImage}>
-                    </View>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/fotoPerfil.jpg")}
+                                style={styles.topImage}
+                            />
+                        </TouchableOpacity>
                     <View style={styles.topInfo}>
                         <CustomText style={styles.topInfoText}>{nome}</CustomText>
                         <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>

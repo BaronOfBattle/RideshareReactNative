@@ -1,13 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { UserContext } from './UserContext';
 import AppBar from './AppBarComponent';
 import { CustomText } from './CustomTextComponent';
 import BotaoComponent from './BotaoComponent';
 
 
 export function LoginComponent({ navigation }) {
+  const { setUser } = useContext(UserContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const [hidePassword, setHidePassword] = useState(true);
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://192.168.0.10:3000/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const userData = await response.json();
+
+      if (response.status === 200) {
+        setUser(userData);
+        console.log(userData);
+        navigation.navigate('Inicio');
+      } else {
+        console.error('Falha no login:', userData.message);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  };
+
 
   const handleContinue = () => {
     navigation.navigate('Cadastro');
@@ -21,6 +51,7 @@ export function LoginComponent({ navigation }) {
         style={styles.textInput}
         placeholder='E-mail ou telefone'
         keyboardType='email-address'
+        onChangeText={(text) => setEmail(text)}
       />
       <View style={styles.textInputPassword}>
         <TextInput
@@ -28,6 +59,7 @@ export function LoginComponent({ navigation }) {
           placeholder='Senha'
           secureTextEntry={hidePassword}
           autoCorrect={false}
+          onChangeText={(password) => setPassword(password)}
         />
         <TouchableOpacity style={styles.toggler} onPress={() => setHidePassword(!hidePassword)}>
           <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={20} color="gray" />
@@ -36,7 +68,7 @@ export function LoginComponent({ navigation }) {
       <CustomText style={styles.esqueciSenha}>Esqueceu a senha?</CustomText>
       <BotaoComponent
         texto={"INICIAR"}
-        onPress={() => {navigation.navigate('Inicio');}}
+        onPress={handleLogin}
         estilo={styles.botaoLogin}
       />
     </View>

@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { useState, useContext } from "react";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput } from "react-native";
+import { UserContext } from "./UserContext";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import AcompanharViagem from "./AcompanharViagem";
 import BottomBar from './BottomBarComponent';
 
 export function Inicio({ navigation }) {
-    const [passageiroSelected, setpassageiroSelected] = useState(true);
+    const { user } = useContext(UserContext);
+    const [passageiroSelected, setpassageiroSelected] = useState(false);
     const [motoristaSelected, setmotoristaSelected] = useState(false);
 
     const [isIda, setIsIda] = useState(0);
@@ -14,6 +16,12 @@ export function Inicio({ navigation }) {
 
     const handleSetIsIda = () => {
         setIsIda((isIda + 1) % 3);
+        console.log(user.userCategory);
+        console.log((user.userCategory === "0"));
+        console.log((((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)));
+        console.log((user.userCategory === "1"));
+        console.log(((((user.userCategory === "1") || user.userCategory === "2") || motoristaSelected)));
+        console.log((user.userCategory === "2"));
     }
 
     const [isCarro, setIsCarro] = useState(true);
@@ -38,35 +46,18 @@ export function Inicio({ navigation }) {
         <View style={styles.container}>
             <AppBar imgPerfil={true} menu={true} />
             <ScrollView>
-                <View style={styles.tipoViagem}>
+                { (user.userCategory === "2") && < View style={styles.tipoViagem}>
                     <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
-                        onPress={() => { setpassageiroSelected(!passageiroSelected), setmotoristaSelected(false) }}
+                        onPress={() => { setpassageiroSelected(true), setmotoristaSelected(false) }}
                     >
                         <CustomText style={passageiroSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>PASSAGEIRO</CustomText></TouchableOpacity>
                     <TouchableOpacity style={motoristaSelected ? styles.tipoViagemIdaVoltaGreen : styles.tipoViagemIdaVolta}
-                        onPress={() => { setmotoristaSelected(!motoristaSelected), setpassageiroSelected(false) }}
+                        onPress={() => { setmotoristaSelected(true), setpassageiroSelected(false) }}
                     >
                         <CustomText style={motoristaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>MOTORISTA</CustomText></TouchableOpacity>
-                </View>
-                {passageiroSelected &&
+                </View>}
+                {(((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)) &&
                     <View style={styles.passageiroView}>
-                        <View style={styles.formViagem}>
-                            <View style={styles.options}>
-                                <TouchableOpacity style={styles.option} onPress={null}>
-                                    <CustomText style={styles.optionCircle}> </CustomText>
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder="Local da partida"></TextInput>
-                                </TouchableOpacity>
-                                <View style={styles.optionLine}><CustomText></CustomText></View>
-                                <TouchableOpacity style={styles.option} onPress={null}>
-                                    <CustomText style={styles.optionCircle}> </CustomText>
-                                    <TextInput
-                                        style={styles.textInput}
-                                        placeholder="Local de destino"></TextInput>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
                         <View style={styles.mid}>
                             <View style={styles.titulos}>
                                 <TouchableOpacity
@@ -75,12 +66,12 @@ export function Inicio({ navigation }) {
                                     <CustomText style={styles.titulo}>{titulo[isIda]}</CustomText>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    onPress={() => { setIsCarro(!isCarro) }}
+                                    onPress={() => { setIsCarro(true) }}
                                 >
                                     <CustomText style={isCarro ? styles.titulo : styles.tituloDisabled}>CARRO </CustomText>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    onPress={() => { setIsCarro(!isCarro) }}
+                                    onPress={() => { setIsCarro(false) }}
                                 >
                                     <CustomText style={!isCarro ? styles.titulo : styles.tituloDisabled}>MOTO</CustomText>
                                 </TouchableOpacity>
@@ -94,8 +85,12 @@ export function Inicio({ navigation }) {
                                         <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
                                     </View>
                                     <View style={styles.midMotoristaInfoImg}>
-                                        <View style={styles.midMotoristaImage}>
-                                        </View>
+                                        <TouchableOpacity>
+                                            <Image
+                                                source={require("../assets/fotoDocumento.jpg")}
+                                                style={styles.midMotoristaImage}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
@@ -112,8 +107,12 @@ export function Inicio({ navigation }) {
                                         <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
                                     </View>
                                     <View style={styles.midMotoristaInfoImg}>
-                                        <View style={styles.midMotoristaImage}>
-                                        </View>
+                                        <TouchableOpacity>
+                                            <Image
+                                                source={require("../assets/fotoDocumento.jpg")}
+                                                style={styles.midMotoristaImage}
+                                            />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
@@ -123,7 +122,7 @@ export function Inicio({ navigation }) {
                             </View>
                         </View>
                     </View>}
-                {motoristaSelected &&
+                {(((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
                     <AcompanharViagem navigation={navigation} showAppBar={false} />
                 }
             </ScrollView>

@@ -18,7 +18,6 @@ const companyRoute = require("./src/routes/companyRoute");
 const vehicleRoute = require("./src/routes/vehicleRoute");
 
 app.use('/user', userRoute);
-app.use('/', userController);
 app.use('/company', companyRoute);
 app.use('/vehicle', vehicleRoute);
     

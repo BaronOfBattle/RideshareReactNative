@@ -2,11 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const path = require("path");
 const fs = require('fs'); 
-const userController = express.Router();
-
-const userRoute = require('../routes/userRoute');
-const companyRoute = require("../routes/companyRoute");
-const vehicleRoute = require("../routes/vehicleRoute");
 
 let User = require('../models/User');
 let Company = require('../models/Company');
@@ -15,10 +10,6 @@ let Vehicle = require('../models/Vehicle');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-
-app.use('/user', userRoute);
-app.use('/company', companyRoute);
-app.use('/vehicle', vehicleRoute);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -37,7 +28,7 @@ const saveImage = (buffer, filename) => {
     });
   };
   
-userController.route('/cadastro').post(upload.any(), async (req, res) => {
+  exports.cadastro = async (req, res) => {
     const dadosUser = {
         fullName: req.body.nome, 
         email: req.body.email, 
@@ -100,6 +91,28 @@ userController.route('/cadastro').post(upload.any(), async (req, res) => {
         console.error('Erro ao salvar:', err);
         res.status(500).json({ 'status': 'failure', 'mssg': 'Erro ao salvar no banco de dados' });
     }
-});
+}
 
-module.exports = userController;
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && user.password === password) { 
+      res.status(200).json(user);
+    } else {
+      res.status(401).json({ message: 'Email ou senha incorretos' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Erro interno do servidor' });
+  }
+};
+
+
+exports.getUserById = async function (req, res) {
+    let id = req.params.id;
+    User.findById(id).then(user => {
+        res.status(200).json({ 'status': 'success', 'user': user }); 
+    }).catch(err => {
+        res.status(400).send({ 'status': 'failure', 'mssg': err });
+    })
+}

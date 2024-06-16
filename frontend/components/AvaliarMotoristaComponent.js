@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
@@ -19,7 +19,7 @@ export function AvaliarMotorista({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView style={styles.content}>
                 <CustomText style={styles.titulo}>AVALIAR O MOTORISTA</CustomText>
                 <View style={styles.midMotorista}>
@@ -28,12 +28,15 @@ export function AvaliarMotorista({ navigation }) {
                             <CustomText style={styles.infoTextNome}>{nome}</CustomText>
                             <CustomText style={styles.infoTextCargoEmpresa}>{cargo} — {empresa}</CustomText>
                             <CustomText style={styles.infoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                        <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
+                            <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
                         </View>
                         <View style={styles.midMotoristaInfoImg}>
-                            <View style={styles.midMotoristaImage}>
-
-                            </View>
+                            <TouchableOpacity>
+                                <Image
+                                    source={require("../assets/fotoDocumento.jpg")}
+                                    style={styles.midMotoristaImage}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.avaliacao}>
@@ -43,15 +46,15 @@ export function AvaliarMotorista({ navigation }) {
                     </View>
                 </View>
                 <View style={styles.continuar}>
-                <BotaoComponent
-                    texto={"Concluído"}
-                    onPress={() => { navigation.navigate("Perfil") }}
-                    estilo={styles.botaoContinuar}
-                    estiloTexto={styles.botaoContinuarTexto}
-                />
-            </View>
+                    <BotaoComponent
+                        texto={"Concluído"}
+                        onPress={() => { navigation.navigate("Perfil") }}
+                        estilo={styles.botaoContinuar}
+                        estiloTexto={styles.botaoContinuarTexto}
+                    />
+                </View>
             </ScrollView>
-            <BottomBar navigation={navigation}/>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
@@ -86,20 +89,20 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     infoTextNome: {
-        fontSize: 17, 
+        fontSize: 17,
         color: "#043F2D"
-    }, 
+    },
     infoTextCargoEmpresa: {
-        fontSize: 13, 
-    }, 
+        fontSize: 13,
+    },
     infoTextTipoValor: {
-        marginTop: 8, 
+        marginTop: 8,
         color: "#79c61e",
         fontSize: 17,
     },
     infoTextCarro: {
-        fontSize: 13, 
-    }, 
+        fontSize: 13,
+    },
     midMotoristaInfoImg: {
         flexDirection: "row",
         justifyContent: "space-between"
@@ -111,8 +114,8 @@ const styles = StyleSheet.create({
         borderRadius: 45,
     },
     avaliacao: {
-        flexDirection: 'row', 
-    }, 
+        flexDirection: 'row',
+    },
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",

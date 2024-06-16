@@ -3,6 +3,7 @@ const app = express();
 const userRoute = express.Router();
 
 let User = require('../models/User');
+const userController = require('../controllers/userController');
 
 userRoute.route('/add').post(function (req, res) {
   let user = new User(req.body);
@@ -15,6 +16,10 @@ userRoute.route('/add').post(function (req, res) {
     });
 });
 
+userRoute.route('/cadastro').post(userController.cadastro);
+
+userRoute.route('/login').post(userController.login);
+
 userRoute.route('/').get(function (req, res) {
   User.find().then(users => {
     res.status(200).json({ 'status': 'success', 'users': users });
@@ -23,14 +28,7 @@ userRoute.route('/').get(function (req, res) {
   });
 });
 
-userRoute.route('/user/:id').get(function (req, res) {
-  let id = req.params.id;
-  User.findById(id).then(user => {
-    res.status(200).json({ 'status': 'success', 'user': user }); 
-  }).catch(err => {
-    res.status(400).send({ 'status': 'failure', 'mssg': err });
-  })
-});
+userRoute.route('/user/:id').get(userController.getUserById);
 
 userRoute.route('/update/:id').put(async function (req, res) {
   try {

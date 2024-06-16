@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
@@ -23,7 +23,7 @@ export function ResumoViagem({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView>
                 <View style={styles.mid}>
                     <CustomText style={styles.titulo}>VIAGEM</CustomText>
@@ -47,9 +47,12 @@ export function ResumoViagem({ navigation }) {
                                     <CustomText style={styles.infoTextCargoEmpresa}>{cargo} — {empresa}</CustomText>
                                 </View>
                                 <View style={styles.midPassageirosInfoImg}>
-                                    <View style={styles.midPassageirosImage}>
-
-                                    </View>
+                                    <TouchableOpacity>
+                                        <Image
+                                            source={require("../assets/fotoDocumento.jpg")}
+                                            style={styles.midPassageirosImage}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                             <View style={styles.avaliacao}>
@@ -69,8 +72,12 @@ export function ResumoViagem({ navigation }) {
                                     <CustomText style={styles.infoTextCargoEmpresa}>PROFESSORA - FAC SENAC</CustomText>
                                 </View>
                                 <View style={styles.midPassageirosInfoImg}>
-                                    <View style={styles.midPassageirosImage}>
-                                    </View>
+                                    <TouchableOpacity>
+                                        <Image
+                                            source={require("../assets/fotoDocumento.jpg")}
+                                            style={styles.midPassageirosImage}
+                                        />
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                             <View style={styles.avaliacao}>
@@ -82,7 +89,7 @@ export function ResumoViagem({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-            <BottomBar navigation={navigation}/>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
