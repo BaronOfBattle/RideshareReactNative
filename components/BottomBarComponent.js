@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import { StyleSheet, View, TouchableOpacity } from 'react-native'; 
+import Icon from 'react-native-vector-icons/Entypo'; 
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import { useRoute } from '@react-navigation/native';
 
 export function BottomBar({ navigation }) {
@@ -14,13 +15,13 @@ export function BottomBar({ navigation }) {
         <View style={styles.bottomBar}>
             <View style={styles.navigationContainer}>
                 <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
-                    <Icon name="home" size={30} color={getColor('Inicio')} />
+                    <MaterialIcons name="home" size={30} color={getColor('Inicio')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('anunciarViagem')}>
-                    <Icon name="directions-car" size={30} color={getColor('anunciarViagem')} />
+                    <Icon name="plus" size={30} color={getColor('anunciarViagem')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
-                    <Icon name="person" size={30} color={getColor('Perfil')} />
+                    <MaterialIcons name="person" size={30} color={getColor('Perfil')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Chat')}>
                     <Icon name="chat" size={30} color={getColor('Chat')} />
