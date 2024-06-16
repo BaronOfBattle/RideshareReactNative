@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, TextInput } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from "./BottomBarComponent";
 
 export function Chat({ navigation }) {
     const [mensagens, setMensagens] = useState([]);
@@ -55,13 +56,16 @@ export function Chat({ navigation }) {
                     />
                 </View>
             </View>
-            <View style={styles.continuar}>
+            {/* <View style={styles.continuar}>
                 <BotaoComponent
                     texto={"VOLTAR"}
                     onPress={() => { navigation.navigate('Perfil') }}
                     estilo={styles.botaoVoltar}
                     estiloTexto={styles.voltarTexto}
                 />
+            </View>*/}
+            <View style={{alignItems: "center"}}>
+            <BottomBar navigation={navigation} />
             </View>
         </KeyboardAwareScrollView>
     );
@@ -119,7 +123,8 @@ const styles = StyleSheet.create({
     },
     inputView: {
         paddingHorizontal: 30,
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: 80, 
     },
     textInput: {
         backgroundColor: "#EEE",
