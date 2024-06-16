@@ -65,7 +65,13 @@ export function SolicitarCarona({ navigation }) {
                     />
                     <BotaoComponent
                         texto={confirmacao === 2 ? "ENVIE UMA MENSAGEM ": "VOLTAR"}
-                        onPress={() => { navigation.navigate('solicitarViagem') }}
+                        onPress={() => {
+                            if (confirmacao === 2) {
+                              navigation.navigate('Chat');
+                            } else {
+                              navigation.navigate('solicitarViagem');
+                            }
+                          }}
                         estilo={styles.botaoVoltar}
                         estiloTexto={styles.voltarTexto}
                     />

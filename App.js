@@ -23,6 +23,7 @@ import AcompanharViagem from './components/AcompanharViagem';
 import AvaliarPassageiros from './components/AvaliarPassageirosComponent';
 import AvaliarMotorista from './components/AvaliarMotoristaComponent';
 import ResumoViagem from './components/ResumoViagemComponent';
+import Chat from './components/ChatComponent';
 
 const Stack = createStackNavigator();
 
@@ -67,6 +68,7 @@ export default function App() {
           <Stack.Screen name="resumoViagem" component={ResumoViagem} />
           <Stack.Screen name="avaliar" component={AvaliarPassageiros} />
           <Stack.Screen name="avaliarMotorista" component={AvaliarMotorista} />
+          <Stack.Screen name="Chat" component={Chat} />
         </Stack.Navigator>
       </NavigationContainer>
     );
