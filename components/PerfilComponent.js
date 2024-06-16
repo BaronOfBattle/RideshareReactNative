@@ -62,11 +62,11 @@ export function Perfil({ navigation }) {
                     onPress={() => { navigation.navigate('solicitarViagem'); }}
                     estilo={styles.botaoSolicitarViagem}
                 />
-                <BotaoComponent
+                {/* <BotaoComponent
                     texto={"Anunciar Viagem"}
                     onPress={() => { navigation.navigate('anunciarViagem'); }}
                     estilo={styles.botaoSolicitarViagem}
-                />
+                /> */}
             </ScrollView>
         </View>
     );
