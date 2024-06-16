@@ -7,7 +7,14 @@ import { CustomText } from "../CustomTextComponent";
 import BotaoComponent from '../BotaoComponent';
 
 const DadosAutomovel = ({ route, navigation }) => {
-    const selectedOption  = route.params;
+    const { userDetails } = route.params;
+    const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
+    const selectedOption = route.params;
+
+    const [tipoAutomovel, setTipoAutomovel] = useState('');
+    const [modelo, setModelo] = useState('');
+    const [cor, setCor] = useState('');
+
 
     useEffect(() => {
         return () => {
@@ -33,26 +40,38 @@ const DadosAutomovel = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        navigation.navigate("cadastroMotorista", { selectedOption });
+        const newDetails = {
+            ...updatedUserDetails,
+            tipoAutomovel,
+            modelo,
+            cor,
+            fotoDocumento: image
+        };
+        console.log(newDetails);
+        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
     };
+    
 
 
     return (
         <View style={styles.container}>
-            <AppBar texto={"Precisa de Ajuda?"}/>
+            <AppBar texto={"Precisa de Ajuda?"} />
             <View style={styles.dadosForm}>
                 <CustomText style={styles.titulo}>Dados do automóvel</CustomText>
                 <TextInput
                     style={styles.textInput}
                     placeholder='Tipo de automóvel'
+                    onChangeText={setTipoAutomovel}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder='Modelo'
+                    onChangeText={setModelo}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder='Cor'
+                    onChangeText={setCor}
                 />
                 <CustomText style={styles.texto}>Agora, inclua uma foto do documento do veículo.</CustomText>
                 {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
@@ -97,7 +116,7 @@ const styles = StyleSheet.create({
     textInput: {
         backgroundColor: "#EEE",
         color: "#111",
-        fontFamily: "Poppins", 
+        fontFamily: "Poppins",
         marginBottom: 25,
         paddingLeft: 20,
         paddingVertical: 10,

@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, } from 'react-native';
 import AppBar from '../AppBarComponent';
 import { CustomText } from "../CustomTextComponent";
 import BotaoComponent from '../BotaoComponent';
 
 const TermosDeSeguranca = ({ route, navigation }) => {
+    const { userDetails } = route.params;
+    const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
     const selectedOption = route.params;
+
+    const [termosAceitos, setTermosAceitos] = useState(true);
 
     useEffect(() => {
         return () => {
@@ -14,7 +18,12 @@ const TermosDeSeguranca = ({ route, navigation }) => {
     }, []);
 
     const handleContinue = () => {
-        navigation.navigate("cadastroMotorista", {selectedOption});
+        const newDetails = {
+            ...updatedUserDetails,
+            termosAceitos, 
+        };
+        console.log(newDetails);
+        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
     };
 
 

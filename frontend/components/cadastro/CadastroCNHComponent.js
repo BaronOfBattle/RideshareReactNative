@@ -7,7 +7,13 @@ import { CustomText } from "../CustomTextComponent";
 import BotaoComponent from '../BotaoComponent';
 
 const CadastroCNH = ({ route, navigation }) => {
+    const { userDetails } = route.params;
+    const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
     const selectedOption = route.params;
+
+    const [registroCNH, setRegistroCNH] = useState('');
+    const [cpf, setCpf] = useState('');
+
 
     useEffect(() => {
         return () => {
@@ -33,23 +39,33 @@ const CadastroCNH = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        navigation.navigate("cadastroMotorista", {selectedOption});
+        const newDetails = {
+            ...updatedUserDetails,
+            registroCNH,
+            cpf,
+            fotoCNH: image
+        };
+        
+        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
     };
+    
 
 
     return (
         <View style={styles.container}>
-            <AppBar texto={"Precisa de Ajuda?"}/>
+            <AppBar texto={"Precisa de Ajuda?"} />
             <View style={styles.dadosForm}>
                 <CustomText style={styles.titulo}>Carteira Nacional de Habilitação (CNH)</CustomText>
                 <CustomText style={styles.texto}>Informe o número de registro da CNH e seu CPF.</CustomText>
                 <TextInput
                     style={styles.textInput}
                     placeholder='Registro da CNH'
+                    onChangeText={setRegistroCNH}
                 />
                 <TextInput
                     style={styles.textInput}
                     placeholder='CPF'
+                    onChangeText={setCpf}
                 />
                 <CustomText style={styles.texto}>Agora inclua uma foto do seu documento CNH.</CustomText>
                 {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
@@ -94,12 +110,12 @@ const styles = StyleSheet.create({
     textInput: {
         backgroundColor: "#EEE",
         color: "#111",
-        fontFamily: "Poppins", 
+        fontFamily: "Poppins",
         marginBottom: 25,
         paddingLeft: 20,
         paddingVertical: 10,
         width: 350,
-    }, 
+    },
     botaoAddFoto: {
         marginLeft: 10,
         alignItems: 'center',

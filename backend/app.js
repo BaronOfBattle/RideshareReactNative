@@ -8,20 +8,25 @@ mongoose.connect("mongodb://localhost:27017/rideshare", { useNewUrlParser: true}
     () => {console.log("Database is connected") }, 
     err => {console.log("Can not connect to the Database " + err)});
     
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
 const userRoute = require('./src/routes/userRoute');
+const userController = require('./src/controllers/userController');
 const companyRoute = require("./src/routes/companyRoute");
 const vehicleRoute = require("./src/routes/vehicleRoute");
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
 
 app.use('/user', userRoute);
+app.use('/', userController);
 app.use('/company', companyRoute);
 app.use('/vehicle', vehicleRoute);
     
 app.get("/", function(req, res) {
     res.send("<h1>Servidor rodando com ExpressJS</h1>");
 });
+
+
 
 app.listen(3000, function() {
     console.log("Listening on port 3000!");

@@ -7,6 +7,8 @@ import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
 const FotoPerfil = ({ route, navigation }) => {
+    const { userDetails } = route.params;
+    const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
     const selectedOption = route.params;
 
     useEffect(() => {
@@ -33,7 +35,9 @@ const FotoPerfil = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        navigation.navigate("cadastroMotorista", {selectedOption});
+        const newDetails = { ...updatedUserDetails, fotoPerfil: image };
+        console.log(newDetails);
+        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
     };
 
     return (

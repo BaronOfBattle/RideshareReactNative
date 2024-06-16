@@ -4,20 +4,33 @@ import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
-export function SelecionarCategoria({ navigation }) {
+export function SelecionarCategoria({ route, navigation }) {
+    const { userDetails, setUserDetails } = route.params;
+    const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
+
+
     const [selectedCategoria, setSelectedCategoria] = useState(null);
 
     const handleOptionPress = (option) => {
         setSelectedCategoria(option);
+        const categoriaValue = option === 'passageiro' ? 0 : option === 'motorista' ? 1 : 2;
+        setUpdatedUserDetails(prevDetails => ({
+            ...prevDetails,
+            categoria: categoriaValue
+        }));
     };
 
+
     const handleContinue = () => {
-        navigation.navigate("cadastroMotorista", { selectedCategoria });
+        console.log(updatedUserDetails);
+        navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails });
     };
+
+
 
     return (
         <View style={styles.container}>
-            <AppBar texto={"Precisa de Ajuda?"}/>
+            <AppBar texto={"Precisa de Ajuda?"} />
             <View style={styles.categoria}>
                 <CustomText style={styles.textoCategoria}>Selecione uma categoria</CustomText>
                 <CustomText style={styles.textoCategoriaModificada}>A opção escolhida pode ser modificada a qualquer momento</CustomText>
@@ -135,7 +148,7 @@ const styles = StyleSheet.create({
         borderLeftColor: "#EEE",
         borderLeftWidth: 3,
         marginRight: 170,
-        height: 10, 
+        height: 10,
     },
     continuar: {
         borderTopWidth: 1.2,

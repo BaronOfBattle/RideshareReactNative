@@ -10,17 +10,21 @@ export function AppBar({ texto, imgPerfil, menu }) {
         style={{ height: 25, width: 150 }}
       />
       <CustomText style={styles.appBarAjuda}>{texto}</CustomText>
-      <View style={{flexDirection: 'row', }}>
-      {imgPerfil && <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: "#EEE" }}></View>
-      }
-      {menu &&
-        <View style={{flexDirection: 'column', marginLeft: 20, }}>
-          <View style={{width: 24, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
-          <View style={{width: 28, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
-          <View style={{width: 20, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
-        </View>
-      }
-    </View>
+      <View style={{ flexDirection: 'row', }}>
+        {imgPerfil &&
+          <Image
+            source={require("../assets/fotoPerfil.jpg")}
+            style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: "#EEE" }}
+          />
+        }
+        {menu &&
+          <View style={{ flexDirection: 'column', marginLeft: 20, }}>
+            <View style={{ width: 24, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
+            <View style={{ width: 28, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
+            <View style={{ width: 20, height: 5, backgroundColor: "#000", marginVertical: 3, borderRadius: 13, }}></View>
+          </View>
+        }
+      </View>
     </View>
   );
 }
