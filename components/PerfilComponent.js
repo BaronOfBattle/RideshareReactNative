@@ -1,9 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { CustomText } from "./CustomTextComponent";
+import { useCustomBackButton } from "./CustomBackButtonComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from './BottomBarComponent';
 
 export function Perfil({ navigation }) {
+    useCustomBackButton(navigation);
+
     const nome = 'João Silva';
     const avaliacao = '4.8';
     const cargo = 'Professor';
@@ -63,11 +67,12 @@ export function Perfil({ navigation }) {
                     estilo={styles.botaoSolicitarViagem}
                 />
                 {/* <BotaoComponent
-                    texto={"Anunciar Viagem"}
-                    onPress={() => { navigation.navigate('anunciarViagem'); }}
-                    estilo={styles.botaoSolicitarViagem}
-                /> */}
+texto={"Anunciar Viagem"}
+onPress={() => { navigation.navigate('anunciarViagem'); }}
+estilo={styles.botaoSolicitarViagem}
+/> */}
             </ScrollView>
+            <BottomBar navigation={navigation} />
         </View>
     );
 }
@@ -112,9 +117,9 @@ const styles = StyleSheet.create({
         margin: 3,
     },
     botaoSolicitarViagem: {
-        marginLeft: 40, 
-        marginBottom: 40, 
-    }, 
+        marginLeft: 40,
+        marginBottom: 80,
+    },
 });
 
 export default Perfil;

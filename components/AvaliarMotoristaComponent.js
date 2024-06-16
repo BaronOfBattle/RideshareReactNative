@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from "./BottomBarComponent";
 
 export function AvaliarMotorista({ navigation }) {
 
@@ -48,6 +49,7 @@ export function AvaliarMotorista({ navigation }) {
                 />
             </View>
             </ScrollView>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }

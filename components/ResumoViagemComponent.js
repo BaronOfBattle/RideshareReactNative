@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
+import BottomBar from './BottomBarComponent';
 
 export function ResumoViagem({ navigation }) {
 
@@ -59,7 +60,7 @@ export function ResumoViagem({ navigation }) {
                     <TouchableOpacity
                         onPress={() => { navigation.navigate('avaliar') }}
                     >
-                        <View style={[styles.midPassageiro, { marginTop: 25, }]}>
+                        <View style={[styles.midPassageiro, { marginTop: 25, marginBottom: 50, }]}>
                             <View style={styles.passageiroInfo}>
                                 <View style={styles.passageiroInfoText}>
                                     <CustomText style={styles.infoTextNome}>Maria</CustomText>
@@ -79,6 +80,7 @@ export function ResumoViagem({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }

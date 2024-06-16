@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from "./BottomBarComponent";
 
 export function SolicitarCarona({ navigation }) {
 
@@ -77,6 +78,7 @@ export function SolicitarCarona({ navigation }) {
                     />
                 </View>
             </ScrollView>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }
@@ -164,7 +166,8 @@ const styles = StyleSheet.create({
     },
     botaoVoltar: {
         marginHorizontal: 40,
-        backgroundColor: "#CDE5B0"
+        backgroundColor: "#CDE5B0",
+        marginBottom: 80, 
     },
     voltarTexto: {
         color: "#000",

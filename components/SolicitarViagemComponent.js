@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from "./BottomBarComponent";
 
 export function SolicitarViagem({ navigation }) {
 
@@ -50,6 +51,7 @@ export function SolicitarViagem({ navigation }) {
                     estiloTexto={styles.botaoContinuarTexto}
                 />
             </View>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }

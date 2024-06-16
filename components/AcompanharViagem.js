@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from './BottomBarComponent';
 
 export function AcompanharViagem({ navigation }) {
 
@@ -72,7 +73,7 @@ export function AcompanharViagem({ navigation }) {
                         </View>
 
                     </View>
-                    <View style={[styles.midPassageiros, { marginTop: 25, }]}>
+                    <View style={[styles.midPassageiros, { marginTop: 25, marginBottom: 50, }]}>
                         <View style={styles.midPassageirosInfoImg}>
                             <View style={styles.midPassageirosInfo}>
                                 <CustomText style={styles.topInfoText}>Maria</CustomText>
@@ -100,6 +101,7 @@ export function AcompanharViagem({ navigation }) {
                     </View>
                 </View>
             </ScrollView>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
+import BottomBar from './BottomBarComponent';
 
 export function AnunciarViagem({ navigation }) {
     const [idaSelected, setIdaSelected] = useState(false);
@@ -76,6 +77,7 @@ export function AnunciarViagem({ navigation }) {
                     estiloTexto={styles.botaoContinuarTexto}
                 />
             </View>
+            <BottomBar navigation={navigation}/>
         </View>
     );
 }
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
-        marginTop: 50,
+        marginBottom: 100,
         justifyContent: 'center',
         alignItems: 'center',
     },

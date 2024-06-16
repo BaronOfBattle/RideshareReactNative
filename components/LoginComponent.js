@@ -34,7 +34,7 @@ export function LoginComponent({ navigation }) {
       <CustomText style={styles.esqueciSenha}>Esqueceu a senha?</CustomText>
       <BotaoComponent
         texto={"INICIAR"}
-        onPress={() => {navigation.navigate('Home');}}
+        onPress={() => {navigation.navigate('Perfil');}}
         estilo={styles.botaoLogin}
       />
     </View>
