@@ -5,7 +5,7 @@ import { CustomText } from './CustomTextComponent';
 const BemVindo = ({ navigation }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.navigate('Perfil');
+      navigation.navigate('Inicio');
     }, 2000);
     return () => clearTimeout(timer);
   }, []);

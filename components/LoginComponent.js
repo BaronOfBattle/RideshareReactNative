@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import AppBar from './AppBarComponent';
 import { CustomText } from './CustomTextComponent';
 import BotaoComponent from './BotaoComponent';
 
@@ -14,6 +15,7 @@ export function LoginComponent({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <AppBar texto={"Precisa de Ajuda?"}/>
     <View style={styles.loginForm}>
       <TextInput
         style={styles.textInput}

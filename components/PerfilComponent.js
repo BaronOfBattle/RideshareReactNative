@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import { useCustomBackButton } from "./CustomBackButtonComponent";
 import BotaoComponent from "./BotaoComponent";
@@ -17,6 +18,7 @@ export function Perfil({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <ScrollView>
                 <View style={styles.top}>
                     <View style={styles.topImage}>

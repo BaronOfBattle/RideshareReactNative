@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import AcompanharViagem from "./AcompanharViagem";
-import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
 export function Inicio({ navigation }) {
@@ -36,6 +36,7 @@ export function Inicio({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <ScrollView>
                 <View style={styles.tipoViagem}>
                     <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}

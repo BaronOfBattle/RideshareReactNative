@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
@@ -10,6 +11,7 @@ export function AnunciarViagem({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <View style={styles.viagem}>
                 <CustomText style={styles.titulo}>Anunciar Viagem: </CustomText>
                 <CustomText style={styles.texto}>Preencha os dados da sua viagem.</CustomText>

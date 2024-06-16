@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
@@ -25,6 +26,7 @@ export function AcompanharViagem({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <ScrollView>
                 <View style={styles.top}>
                     <BotaoComponent

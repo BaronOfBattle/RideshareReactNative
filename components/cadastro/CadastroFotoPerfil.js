@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
@@ -37,6 +38,7 @@ const FotoPerfil = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.perfil}>
                 <CustomText style={styles.titulo}>Perfil do Usuário</CustomText>
                 <CustomText style={styles.texto}>Adicione uma foto ao seu perfil para facilitar o reconhecimento pelos outros usuários.</CustomText>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native'
+import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
@@ -19,6 +20,7 @@ const DadosEmpresa = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.dadosForm}>
                 <CustomText style={styles.titulo}>Dados da empresa</CustomText>
                 <TextInput

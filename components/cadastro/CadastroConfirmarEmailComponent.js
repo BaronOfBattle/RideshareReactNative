@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
@@ -26,6 +27,7 @@ export function ConfirmarEmailComponent({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.inserirCodigo}>
                 <CustomText style={styles.textoInserirCodigo}>Insira o códgio enviado para o E-mail informado:</CustomText>
                 <View style={styles.codigo}>

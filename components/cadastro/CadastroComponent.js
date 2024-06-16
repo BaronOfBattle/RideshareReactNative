@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import AppBar from '../AppBarComponent';
 import { Ionicons } from '@expo/vector-icons';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
@@ -23,6 +24,7 @@ export function CadastroComponent({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.cadastroForm}>
                 <TextInput
                     style={styles.textInput}

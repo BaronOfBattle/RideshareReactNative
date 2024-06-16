@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
@@ -16,6 +17,7 @@ export function SelecionarCategoria({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.categoria}>
                 <CustomText style={styles.textoCategoria}>Selecione uma categoria</CustomText>
                 <CustomText style={styles.textoCategoriaModificada}>A opção escolhida pode ser modificada a qualquer momento</CustomText>

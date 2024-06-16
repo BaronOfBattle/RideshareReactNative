@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
 import BotaoComponent from "./BotaoComponent";
@@ -15,6 +16,7 @@ export function AvaliarPassageiros({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <ScrollView style={styles.content}>
                 <CustomText style={styles.titulo}>AVALIAR PASSAGEIROS</CustomText>
                 <View style={styles.midPassageiro}>

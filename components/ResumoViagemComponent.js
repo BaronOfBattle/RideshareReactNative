@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import StarRating from "./StarRatingComponent";
 import BottomBar from './BottomBarComponent';
@@ -22,6 +23,7 @@ export function ResumoViagem({ navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar imgPerfil={true} menu={true}/>
             <ScrollView>
                 <View style={styles.mid}>
                     <CustomText style={styles.titulo}>VIAGEM</CustomText>

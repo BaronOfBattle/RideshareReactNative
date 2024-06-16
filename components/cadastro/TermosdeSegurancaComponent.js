@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { View, Text, StyleSheet, } from 'react-native';
+import AppBar from '../AppBarComponent';
 import { CustomText } from "../CustomTextComponent";
 import BotaoComponent from '../BotaoComponent';
 
@@ -19,6 +20,7 @@ const TermosDeSeguranca = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.dadosForm}>
                 <CustomText style={styles.titulo}>Termos de segurança</CustomText>
                 <CustomText style={styles.textoTopico}>1. Relacionamento Contratual</CustomText>

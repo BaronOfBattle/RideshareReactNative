@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, Image } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import AppBar from '../AppBarComponent';
 import { CustomText } from "../CustomTextComponent";
 import BotaoComponent from '../BotaoComponent';
 
@@ -38,6 +39,7 @@ const CadastroCNH = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.dadosForm}>
                 <CustomText style={styles.titulo}>Carteira Nacional de Habilitação (CNH)</CustomText>
                 <CustomText style={styles.texto}>Informe o número de registro da CNH e seu CPF.</CustomText>

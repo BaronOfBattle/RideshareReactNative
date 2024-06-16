@@ -47,7 +47,6 @@ export default function App() {
   } else {
     return (
       <NavigationContainer>
-        <AppBar />
         <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginComponent} />
           <Stack.Screen name="Cadastro" component={CadastroComponent} />

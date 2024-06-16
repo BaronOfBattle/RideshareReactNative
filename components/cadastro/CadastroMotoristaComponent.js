@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
@@ -37,6 +38,7 @@ export function CadatroMotorista({ route, navigation }) {
 
     return (
         <View style={styles.container}>
+            <AppBar texto={"Precisa de Ajuda?"}/>
             <View style={styles.categoria}>
                 <CustomText style={styles.titulo}>Cadastro de motoristas</CustomText>
                 <CustomText style={styles.texto}>Preencha os campos para continuar</CustomText>

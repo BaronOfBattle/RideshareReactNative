@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { View, StyleSheet, ScrollView, TextInput } from "react-native";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from "./BottomBarComponent";
@@ -30,6 +31,7 @@ export function Chat({ navigation }) {
             contentContainerStyle={styles.content}
             scrollEnabled={false}
         >
+            <AppBar imgPerfil={true} menu={true}/>
             <View style={styles.content}>
                 <View style={styles.info}>
                     <View style={styles.imagem}>
