@@ -31,7 +31,7 @@ export function AvaliarPassageiros({ navigation }) {
                     </View>
                     <View style={styles.avaliacao}>
                         <CustomText>
-                            <StarRating totalStars={5} rating={0} onRating={(rate) => console.log(rate)} />
+                            <StarRating totalStars={5} rating={0} onRating={(rate) => null} />
                         </CustomText>
                     </View>
                 </View>
@@ -48,7 +48,7 @@ export function AvaliarPassageiros({ navigation }) {
                     </View>
                     <View style={styles.avaliacao}>
                         <CustomText>
-                        <StarRating totalStars={5} rating={0} onRating={(rate) => console.log(rate)} />
+                        <StarRating totalStars={5} rating={0} onRating={(rate) => null} />
                         </CustomText>
                     </View>
                 </View>
