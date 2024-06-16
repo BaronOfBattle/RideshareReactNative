@@ -74,7 +74,7 @@ export function AnunciarViagem({ navigation }) {
             <View style={styles.continuar}>
                 <BotaoComponent
                     texto={"Concluído"}
-                    onPress={() => { navigation.navigate("acompanharViagem") }}
+                    onPress={() => navigation.navigate('acompanharViagem', { showAppBar: true })}
                     estilo={styles.botaoContinuar}
                     estiloTexto={styles.botaoContinuarTexto}
                 />

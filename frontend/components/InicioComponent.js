@@ -36,7 +36,7 @@ export function Inicio({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            <AppBar imgPerfil={true} menu={true} />
             <ScrollView>
                 <View style={styles.tipoViagem}>
                     <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
@@ -49,82 +49,82 @@ export function Inicio({ navigation }) {
                         <CustomText style={motoristaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>MOTORISTA</CustomText></TouchableOpacity>
                 </View>
                 {passageiroSelected &&
-                 <View style={styles.passageiroView}>
-                    <View style={styles.formViagem}>
-                        <View style={styles.options}>
-                            <TouchableOpacity style={styles.option} onPress={null}>
-                                <CustomText style={styles.optionCircle}> </CustomText>
-                                <TextInput
-                                    style={styles.textInput}
-                                    placeholder="Local da partida"></TextInput>
-                            </TouchableOpacity>
-                            <View style={styles.optionLine}><CustomText></CustomText></View>
-                            <TouchableOpacity style={styles.option} onPress={null}>
-                                <CustomText style={styles.optionCircle}> </CustomText>
-                                <TextInput
-                                    style={styles.textInput}
-                                    placeholder="Local de destino"></TextInput>
-                            </TouchableOpacity>
+                    <View style={styles.passageiroView}>
+                        <View style={styles.formViagem}>
+                            <View style={styles.options}>
+                                <TouchableOpacity style={styles.option} onPress={null}>
+                                    <CustomText style={styles.optionCircle}> </CustomText>
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder="Local da partida"></TextInput>
+                                </TouchableOpacity>
+                                <View style={styles.optionLine}><CustomText></CustomText></View>
+                                <TouchableOpacity style={styles.option} onPress={null}>
+                                    <CustomText style={styles.optionCircle}> </CustomText>
+                                    <TextInput
+                                        style={styles.textInput}
+                                        placeholder="Local de destino"></TextInput>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                    <View style={styles.mid}>
-                        <View style={styles.titulos}>
-                            <TouchableOpacity
-                                onPress={handleSetIsIda}
-                            >
-                                <CustomText style={styles.titulo}>{titulo[isIda]}</CustomText>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => { setIsCarro(!isCarro) }}
-                            >
-                                <CustomText style={isCarro ? styles.titulo : styles.tituloDisabled}>CARRO </CustomText>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => { setIsCarro(!isCarro) }}
-                            >
-                                <CustomText style={!isCarro ? styles.titulo : styles.tituloDisabled}>MOTO</CustomText>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.midViagem}>
-                            <View style={styles.infoNomeEFoto}>
-                                <View>
-                                    <CustomText style={styles.infoTextNome}>{nome}</CustomText>
-                                    <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                                    <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
-                                    <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
-                                </View>
-                                <View style={styles.midMotoristaInfoImg}>
-                                    <View style={styles.midMotoristaImage}>
+                        <View style={styles.mid}>
+                            <View style={styles.titulos}>
+                                <TouchableOpacity
+                                    onPress={handleSetIsIda}
+                                >
+                                    <CustomText style={styles.titulo}>{titulo[isIda]}</CustomText>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => { setIsCarro(!isCarro) }}
+                                >
+                                    <CustomText style={isCarro ? styles.titulo : styles.tituloDisabled}>CARRO </CustomText>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => { setIsCarro(!isCarro) }}
+                                >
+                                    <CustomText style={!isCarro ? styles.titulo : styles.tituloDisabled}>MOTO</CustomText>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.midViagem}>
+                                <View style={styles.infoNomeEFoto}>
+                                    <View>
+                                        <CustomText style={styles.infoTextNome}>{nome}</CustomText>
+                                        <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
+                                        <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
+                                        <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
+                                    </View>
+                                    <View style={styles.midMotoristaInfoImg}>
+                                        <View style={styles.midMotoristaImage}>
+                                        </View>
                                     </View>
                                 </View>
+                                <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
+                                <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
+                                <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
+                                <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
                             </View>
-                            <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
-                            <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
-                        </View>
-                        <View style={styles.midViagem}>
-                            <View style={styles.infoNomeEFoto}>
-                                <View>
-                                    <CustomText style={styles.infoTextNome}>Maria</CustomText>
-                                    <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                                    <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
-                                    <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
-                                </View>
-                                <View style={styles.midMotoristaInfoImg}>
-                                    <View style={styles.midMotoristaImage}>
+                            <View style={styles.midViagem}>
+                                <View style={styles.infoNomeEFoto}>
+                                    <View>
+                                        <CustomText style={styles.infoTextNome}>Maria</CustomText>
+                                        <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
+                                        <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
+                                        <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
+                                    </View>
+                                    <View style={styles.midMotoristaInfoImg}>
+                                        <View style={styles.midMotoristaImage}>
+                                        </View>
                                     </View>
                                 </View>
+                                <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
+                                <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
+                                <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
+                                <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
                             </View>
-                            <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
-                            <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
                         </View>
-                    </View>
-                </View>}
+                    </View>}
                 {motoristaSelected &&
-                <AcompanharViagem navigation={navigation}/>
+                    <AcompanharViagem navigation={navigation} showAppBar={false} />
                 }
             </ScrollView>
             <BottomBar navigation={navigation} />

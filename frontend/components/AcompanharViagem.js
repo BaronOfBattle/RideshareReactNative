@@ -5,7 +5,7 @@ import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
-export function AcompanharViagem({ navigation }) {
+export function AcompanharViagem({ navigation, showAppBar = true }) {
 
     const nome = 'João';
     const cargo = 'Professor';
@@ -26,7 +26,7 @@ export function AcompanharViagem({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true}/>
+            { showAppBar && <AppBar imgPerfil={true} menu={true}/>}
             <ScrollView>
                 <View style={styles.top}>
                     <BotaoComponent
