@@ -71,11 +71,7 @@ export function CadatroMotorista({ route, navigation }) {
         });
 
         try {
-            const response = await axios.post('http://192.168.0.10:3000/cadastro', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const response = await axios.post('http://192.168.0.10:3000/user/cadastro', formData);
 
             if (response.status === 201) {
                 navigation.navigate("bemVindo");

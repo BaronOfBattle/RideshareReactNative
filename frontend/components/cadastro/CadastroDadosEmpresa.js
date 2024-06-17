@@ -12,7 +12,10 @@ const DadosEmpresa = ({ route, navigation }) => {
     const [nomeEmpresa, setNomeEmpresa] = useState('');
     const [cargo, setCargo] = useState('');
     const [codigo, setCodigo] = useState('');
-    const [endereco, setEndereco] = useState('');
+    const [rua, setRua] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('');
+    const [pais, setPais] = useState('');
     const [cep, setCep] = useState('');
     const [numero, setNumero] = useState('');
 
@@ -29,7 +32,10 @@ const DadosEmpresa = ({ route, navigation }) => {
             nomeEmpresa,
             cargo,
             codigo,
-            endereco,
+            rua,
+            cidade,
+            estado,
+            pais,
             cep,
             numero
         };
@@ -61,8 +67,25 @@ const DadosEmpresa = ({ route, navigation }) => {
                 />
                 <TextInput
                     style={styles.textInput}
-                    placeholder='Endereço'
-                    onChangeText={setEndereco}
+                    placeholder='Rua'
+                    onChangeText={setRua}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='Cidade'
+                    onChangeText={setCidade}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='Estado'
+                    maxLength={2}
+                    onChangeText={setEstado}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='País'
+                    maxLength={2}
+                    onChangeText={setPais}
                 />
                 <View style={styles.cepNum}>
                     <TextInput
@@ -94,7 +117,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#FFF",
     },
     dadosForm: {
-        padding: 30,
+        paddingTop: 30,
+        paddingHorizontal: 30,
     },
     titulo: {
         color: "#79c61e",
@@ -136,7 +160,7 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
-        marginTop: 120,
+        marginTop: 0,
     },
     botaoContinuar: {
         marginHorizontal: 40,

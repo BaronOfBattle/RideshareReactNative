@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("./User");
+const Address = require("./Address");
 const Schema = mongoose.Schema;
 
 let Company = new Schema({
@@ -12,16 +13,11 @@ let Company = new Schema({
     code: {
         type: String
     }, 
-    address: {
-        type: String
+    addressId: {
+        type: mongoose.Schema.ObjectId, 
+        ref: 'Address'
     }, 
-    CEP: {
-        type: String
-    }, 
-    number: {
-        type: String
-    }, 
-    user: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

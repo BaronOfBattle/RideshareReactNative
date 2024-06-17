@@ -9,19 +9,14 @@ import BottomBar from './BottomBarComponent';
 export function Inicio({ navigation }) {
     const { user } = useContext(UserContext);
     const [passageiroSelected, setpassageiroSelected] = useState(false);
-    const [motoristaSelected, setmotoristaSelected] = useState(false);
+    const [motoristaSelected, setmotoristaSelected] = useState(user.userCategory);
 
     const [isIda, setIsIda] = useState(0);
     const titulo = ["IDA", "VOLTA", "IDA E VOLTA"];
 
     const handleSetIsIda = () => {
-        setIsIda((isIda + 1) % 3);
         console.log(user.userCategory);
-        console.log((user.userCategory === "0"));
-        console.log((((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)));
-        console.log((user.userCategory === "1"));
-        console.log(((((user.userCategory === "1") || user.userCategory === "2") || motoristaSelected)));
-        console.log((user.userCategory === "2"));
+        setIsIda((isIda + 1) % 3);
     }
 
     const [isCarro, setIsCarro] = useState(true);

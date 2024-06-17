@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native'; 
+import { UserContext } from "./UserContext";
 import Icon from 'react-native-vector-icons/Entypo'; 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import { useRoute } from '@react-navigation/native';
 
 export function BottomBar({ navigation }) {
     const route = useRoute();
-
+    const { user } = useContext(UserContext);
     const getColor = (screenName) => {
         return route.name === screenName ? '#79c61e' : '#000';
     };
@@ -17,8 +18,8 @@ export function BottomBar({ navigation }) {
                 <TouchableOpacity onPress={() => navigation.navigate('Inicio')}>
                     <MaterialIcons name="home" size={30} color={getColor('Inicio')} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('anunciarViagem')}>
-                    <Icon name="plus" size={30} color={getColor('anunciarViagem')} />
+                <TouchableOpacity onPress={() =>(user.userCategory === "0") ?  navigation.navigate('solicitarViagem') : navigation.navigate('anunciarViagem')}>
+                    <Icon name="plus" size={30} color={(user.userCategory === "0") ? getColor('solicitarViagem') : getColor('anunciarViagem')} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
                     <MaterialIcons name="person" size={30} color={getColor('Perfil')} />

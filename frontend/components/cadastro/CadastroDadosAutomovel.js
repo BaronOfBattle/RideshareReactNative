@@ -12,7 +12,9 @@ const DadosAutomovel = ({ route, navigation }) => {
     const selectedOption = route.params;
 
     const [tipoAutomovel, setTipoAutomovel] = useState('');
+    const [marca, setMarca] = useState('');
     const [modelo, setModelo] = useState('');
+    const [placa, setPlaca] = useState('');
     const [cor, setCor] = useState('');
 
 
@@ -43,7 +45,9 @@ const DadosAutomovel = ({ route, navigation }) => {
         const newDetails = {
             ...updatedUserDetails,
             tipoAutomovel,
+            marca,
             modelo,
+            placa,
             cor,
             fotoDocumento: image
         };
@@ -65,8 +69,18 @@ const DadosAutomovel = ({ route, navigation }) => {
                 />
                 <TextInput
                     style={styles.textInput}
+                    placeholder='Marca'
+                    onChangeText={setMarca}
+                />
+                <TextInput
+                    style={styles.textInput}
                     placeholder='Modelo'
                     onChangeText={setModelo}
+                />
+                <TextInput
+                    style={styles.textInput}
+                    placeholder='Placa'
+                    onChangeText={setPlaca}
                 />
                 <TextInput
                     style={styles.textInput}
@@ -74,7 +88,7 @@ const DadosAutomovel = ({ route, navigation }) => {
                     onChangeText={setCor}
                 />
                 <CustomText style={styles.texto}>Agora, inclua uma foto do documento do veículo.</CustomText>
-                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
+                {image && <Image source={{ uri: image }} style={{ width: 50, height: 50, borderRadius: 25, }} />}
                 <BotaoComponent
                     onPress={pickImage}
                     estilo={styles.botaoAddFoto}
@@ -129,7 +143,7 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
-        marginTop: 50,
+        marginTop: 0,
     },
     botaoContinuar: {
         marginHorizontal: 40,

@@ -16,10 +16,12 @@ const userRoute = require('./src/routes/userRoute');
 const userController = require('./src/controllers/userController');
 const companyRoute = require("./src/routes/companyRoute");
 const vehicleRoute = require("./src/routes/vehicleRoute");
+const addressRoute = require("./src/routes/addressRoute");
 
 app.use('/user', userRoute);
 app.use('/company', companyRoute);
 app.use('/vehicle', vehicleRoute);
+app.use('/address', addressRoute);
     
 app.get("/", function(req, res) {
     res.send("<h1>Servidor rodando com ExpressJS</h1>");

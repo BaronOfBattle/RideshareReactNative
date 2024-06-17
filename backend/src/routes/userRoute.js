@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
+const multer = require('multer');
 const userRoute = express.Router();
 
 let User = require('../models/User');
 const userController = require('../controllers/userController');
+
+const upload = multer({ dest: 'uploads/' });
 
 userRoute.route('/add').post(function (req, res) {
   let user = new User(req.body);
@@ -16,7 +19,7 @@ userRoute.route('/add').post(function (req, res) {
     });
 });
 
-userRoute.route('/cadastro').post(userController.cadastro);
+userRoute.route('/cadastro').post(upload.any(), userController.cadastro);
 
 userRoute.route('/login').post(userController.login);
 

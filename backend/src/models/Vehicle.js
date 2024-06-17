@@ -3,10 +3,16 @@ const User = require("./User");
 const Schema = mongoose.Schema;
 
 let Vehicle = new Schema({
-    vehicleType: {
+    type: {
+        type: String
+    }, 
+    brand: {
         type: String
     }, 
     model: {
+        type: String
+    }, 
+    plate: {
         type: String
     }, 
     color: {
@@ -15,7 +21,7 @@ let Vehicle = new Schema({
     documentPictureAddress: {
         type: String
     }, 
-    owner: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }

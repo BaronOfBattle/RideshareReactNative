@@ -28,7 +28,6 @@ export function LoginComponent({ navigation }) {
 
       if (response.status === 200) {
         setUser(userData);
-        console.log(userData);
         navigation.navigate('Inicio');
       } else {
         console.error('Falha no login:', userData.message);
