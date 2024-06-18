@@ -2,9 +2,14 @@ const express = require("express");
 path = require("path");
 bodyParser = require("body-parser");
 cors = require("cors");
+require('dotenv').config();
+
+const dbUri = process.env.DB_URI;
+
+
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/rideshare", { useNewUrlParser: true}).then(
+mongoose.connect(dbUri, { useNewUrlParser: true}).then(
     () => {console.log("Database is connected") }, 
     err => {console.log("Can not connect to the Database " + err)});
     
