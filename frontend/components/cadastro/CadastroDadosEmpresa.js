@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native'
+import { View, ScrollView, StyleSheet, TextInput } from 'react-native'
 import AppBar from '../AppBarComponent';
 import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
@@ -30,9 +30,9 @@ const DadosEmpresa = ({ route, navigation }) => {
 
         console.log("O da empresa: ");
         console.log(userDetails);
-        if(nomeEmpresa && cargo && codigo && rua && cidade && estado && pais && cep && numero ) {
-            const dadosEndereco = {"rua": rua, "cidade": cidade, "estado": estado, "pais": pais, "cep": cep, "numero": numero};
-            const dadosEmpresa = {"nomeEmpresa": nomeEmpresa, "cargo": cargo, "codigo": codigo, "dadosEndereco": dadosEndereco};
+        if (nomeEmpresa && cargo && codigo && rua && cidade && estado && pais && cep && numero) {
+            const dadosEndereco = { "rua": rua, "cidade": cidade, "estado": estado, "pais": pais, "cep": cep, "numero": numero };
+            const dadosEmpresa = { "nomeEmpresa": nomeEmpresa, "cargo": cargo, "codigo": codigo, "dadosEndereco": dadosEndereco };
 
             updatedUserDetails.dadosEmpresa.data = dadosEmpresa;
             updatedUserDetails.dadosEmpresa.status = 'Etapa concluída';
@@ -42,71 +42,74 @@ const DadosEmpresa = ({ route, navigation }) => {
             alert("Por favor, preencha todos os campos!");
         }
     };
-    
+
 
 
     return (
         <View style={styles.container}>
             <AppBar texto={"Precisa de Ajuda?"} />
-            <View style={styles.dadosForm}>
-                <CustomText style={styles.titulo}>Dados da empresa</CustomText>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Nome da empresa'
-                    onChangeText={setNomeEmpresa}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Cargo'
-                    onChangeText={setCargo}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Código'
-                    onChangeText={setCodigo}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Rua'
-                    onChangeText={setRua}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Cidade'
-                    onChangeText={setCidade}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Estado'
-                    maxLength={2}
-                    onChangeText={setEstado}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='País'
-                    maxLength={2}
-                    onChangeText={setPais}
-                />
-                <View style={styles.cepNum}>
+            <ScrollView>
+
+                <View style={styles.dadosForm}>
+                    <CustomText style={styles.titulo}>Dados da empresa</CustomText>
                     <TextInput
-                        style={styles.textInputCEP}
-                        placeholder='CEP'
-                        onChangeText={setCep}
+                        style={styles.textInput}
+                        placeholder='Nome da empresa'
+                        onChangeText={setNomeEmpresa}
                     />
                     <TextInput
-                        style={styles.textInputNum}
-                        placeholder='Número'
-                        onChangeText={setNumero}
+                        style={styles.textInput}
+                        placeholder='Cargo'
+                        onChangeText={setCargo}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Código'
+                        onChangeText={setCodigo}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Rua'
+                        onChangeText={setRua}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Cidade'
+                        onChangeText={setCidade}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Estado'
+                        maxLength={2}
+                        onChangeText={(text) => setEstado(text.toUpperCase())}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='País'
+                        maxLength={2}
+                        onChangeText={(text) => setPais(text.toUpperCase())}
+                    />
+                    <View style={styles.cepNum}>
+                        <TextInput
+                            style={styles.textInputCEP}
+                            placeholder='CEP'
+                            onChangeText={setCep}
+                        />
+                        <TextInput
+                            style={styles.textInputNum}
+                            placeholder='Número'
+                            onChangeText={setNumero}
+                        />
+                    </View>
+                </View>
+                <View style={styles.continuar}>
+                    <BotaoComponent
+                        texto={"CONTINUAR"}
+                        onPress={handleContinue}
+                        estilo={styles.botaoContinuar}
                     />
                 </View>
-            </View>
-            <View style={styles.continuar}>
-                <BotaoComponent
-                    texto={"CONTINUAR"}
-                    onPress={handleContinue}
-                    estilo={styles.botaoContinuar}
-                />
-            </View>
+            </ScrollView>
         </View>
     );
 }

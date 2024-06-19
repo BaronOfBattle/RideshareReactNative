@@ -5,7 +5,7 @@ import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
-export function AcompanharViagem({ navigation, showAppBar = true }) {
+export function AcompanharViagem({ navigation, showAppBar = true, home = true }) {
 
     const nome = 'João';
     const cargo = 'Professor';
@@ -28,14 +28,16 @@ export function AcompanharViagem({ navigation, showAppBar = true }) {
         <View style={styles.container}>
             {showAppBar && <AppBar imgPerfil={true} menu={true} />}
             <ScrollView>
-                <View style={styles.top}>
-                    <BotaoComponent
-                        texto={"INICIAR VIAGEM"}
-                        onPress={() => { navigation.navigate('resumoViagem') }}
-                        estilo={styles.botaoSolicitarCarona}
-                        estiloTexto={styles.solicitarCaronaTexto}
-                    />
-                </View>
+                { home && 
+                    <View style={styles.top}>
+                        <BotaoComponent
+                            texto={"INICIAR VIAGEM"}
+                            onPress={() => { navigation.navigate('resumoViagem') }}
+                            estilo={styles.botaoSolicitarCarona}
+                            estiloTexto={styles.solicitarCaronaTexto}
+                        />
+                    </View>
+                }
                 <View style={styles.mid}>
                     <CustomText style={styles.titulo}>ACOMPANHE SUA VIAGEM</CustomText>
                     <View style={styles.midViagem}>

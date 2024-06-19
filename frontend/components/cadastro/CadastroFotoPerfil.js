@@ -33,6 +33,19 @@ const FotoPerfil = ({ route, navigation }) => {
         }
     };
 
+    const takePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [16, 16],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
     const handleContinue = () => {
         if (image) {
             updatedUserDetails.fotoPerfil.data = image;
@@ -43,24 +56,35 @@ const FotoPerfil = ({ route, navigation }) => {
             alert("Por favor, selecione uma foto de perfil para continuar.");
         }
     };
-    
+
 
     return (
         <View style={styles.container}>
-            <AppBar texto={"Precisa de Ajuda?"}/>
+            <AppBar texto={"Precisa de Ajuda?"} />
             <View style={styles.perfil}>
                 <CustomText style={styles.titulo}>Perfil do Usuário</CustomText>
                 <CustomText style={styles.texto}>Adicione uma foto ao seu perfil para facilitar o reconhecimento pelos outros usuários.</CustomText>
                 <CustomText style={styles.texto}>1. Certifique-se de estar de frente para a câmera.</CustomText>
                 <CustomText style={styles.texto}>2. Escolha um ambiente bem iluminado.</CustomText>
                 <CustomText style={styles.textoTres}>3. Qualidade: verifique se a foto está nítida para uma representação clara e precisa.</CustomText>
-                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
+                {image && <Image source={{ uri: image }} style={{ width: 70, height: 70, borderRadius: 35, }} />}
                 <BotaoComponent
                     onPress={pickImage}
                     estilo={styles.botaoAddFoto}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 18 }}>
+                        <MaterialIcons name="photo-library" size={24} color="black" />
+                        <CustomText>  Selecionar da Galeria</CustomText>
+                    </View>
+                </BotaoComponent>
+
+                <BotaoComponent
+                    onPress={takePhoto}
+                    estilo={styles.botaoAddFoto}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 18 }}>
                         <MaterialIcons name="photo-camera" size={24} color="black" />
+                        <CustomText>  Tirar Foto</CustomText>
                     </View>
                 </BotaoComponent>
             </View>
@@ -95,7 +119,7 @@ const styles = StyleSheet.create({
     },
     textoTres: {
         fontSize: 16,
-        marginBottom: 100,
+        marginBottom: 20,
     },
     botaoAddFoto: {
         marginLeft: 10,
@@ -104,7 +128,6 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
-        marginTop: 10,
     },
     botaoContinuar: {
         marginHorizontal: 40,

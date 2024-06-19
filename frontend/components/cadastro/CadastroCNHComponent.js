@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, Image } from 'react-native'
+import { View, ScrollView, StyleSheet, TextInput, Image } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import AppBar from '../AppBarComponent';
@@ -38,6 +38,19 @@ const CadastroCNH = ({ route, navigation }) => {
         }
     };
 
+    const takePhoto = async () => {
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [16, 16],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
     const handleContinue = () => {
         if (registroCNH && cpf && image) {
             const dadosCNH = { "registroCNH": registroCNH, "cpf": cpf, "fotoCNH": image };
@@ -55,37 +68,51 @@ const CadastroCNH = ({ route, navigation }) => {
     return (
         <View style={styles.container}>
             <AppBar texto={"Precisa de Ajuda?"} />
-            <View style={styles.dadosForm}>
-                <CustomText style={styles.titulo}>Carteira Nacional de Habilitação (CNH)</CustomText>
-                <CustomText style={styles.texto}>Informe o número de registro da CNH e seu CPF.</CustomText>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='Registro da CNH'
-                    onChangeText={setRegistroCNH}
-                />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder='CPF'
-                    onChangeText={setCpf}
-                />
-                <CustomText style={styles.texto}>Agora inclua uma foto do seu documento CNH.</CustomText>
-                {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
-                <BotaoComponent
-                    onPress={pickImage}
-                    estilo={styles.botaoAddFoto}
-                >
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 18 }}>
-                        <MaterialIcons name="photo-camera" size={24} color="black" />
-                    </View>
-                </BotaoComponent>
-            </View>
-            <View style={styles.continuar}>
-                <BotaoComponent
-                    texto={"CONTINUAR"}
-                    onPress={handleContinue}
-                    estilo={styles.botaoContinuar}
-                />
-            </View>
+            <ScrollView>
+
+                <View style={styles.dadosForm}>
+                    <CustomText style={styles.titulo}>Carteira Nacional de Habilitação (CNH)</CustomText>
+                    <CustomText style={styles.texto}>Informe o número de registro da CNH e seu CPF.</CustomText>
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='Registro da CNH'
+                        onChangeText={setRegistroCNH}
+                    />
+                    <TextInput
+                        style={styles.textInput}
+                        placeholder='CPF'
+                        onChangeText={setCpf}
+                    />
+                    <CustomText style={styles.texto}>Agora inclua uma foto do seu documento CNH.</CustomText>
+                    {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 50, }} />}
+                    <BotaoComponent
+                        onPress={pickImage}
+                        estilo={styles.botaoAddFoto}
+                    >
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 18 }}>
+                            <MaterialIcons name="photo-library" size={24} color="black" />
+                            <CustomText>  Selecionar da Galeria</CustomText>
+                        </View>
+                    </BotaoComponent>
+
+                    <BotaoComponent
+                        onPress={takePhoto}
+                        estilo={styles.botaoAddFoto}
+                    >
+                        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 18 }}>
+                            <MaterialIcons name="photo-camera" size={24} color="black" />
+                            <CustomText>  Tirar Foto</CustomText>
+                        </View>
+                    </BotaoComponent>
+                </View>
+                <View style={styles.continuar}>
+                    <BotaoComponent
+                        texto={"CONTINUAR"}
+                        onPress={handleContinue}
+                        estilo={styles.botaoContinuar}
+                    />
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -124,6 +151,7 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
+        marginBottom: 50, 
     },
     botaoContinuar: {
         marginHorizontal: 40,

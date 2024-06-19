@@ -114,7 +114,7 @@ exports.getUserById = async function (req, res) {
 
 
 function deleteUploadsFolder() {
-    const uploadsPath = path.join(__dirname, '../uploads');
+    const uploadsPath = path.join(__dirname, '../uploads/*');
 
     if (fs.existsSync(uploadsPath)) {
         fs.rm(uploadsPath, { recursive: true, force: true }, (err) => {

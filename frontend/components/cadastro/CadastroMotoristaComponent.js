@@ -35,10 +35,7 @@ export function CadatroMotorista({ route, navigation }) {
     const handleOptionPress = (option) => {
         const optionIndex = options.indexOf(option);
         if (optionIndex === 0 || userDetails[options[optionIndex - 1]].status === 'Etapa concluída') {
-            console.log("Entrou no if");
             setSelectedOption(option);
-            console.log("O User do if: ");
-            console.log(userDetails);
             navigation.navigate(option, { userDetails: userDetails });
         } else {
             alert('Por favor, conclua a etapa anterior antes de continuar.');
@@ -155,11 +152,9 @@ export function CadatroMotorista({ route, navigation }) {
 
 
         try {
-            console.log("Form data: ");
-            console.log(formData);
             const response = await axios({
                 method: 'post',
-                url: `${apiUrl}user/cadastro`,
+                url: `http://192.168.0.10:3000/user/cadastro`,
                 data: formData,
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
