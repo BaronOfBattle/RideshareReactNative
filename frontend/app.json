@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "apiUrl": "https://ridesharereactnative.onrender.com/"
+    },
     "ios": {
       "supportsTablet": true
     },

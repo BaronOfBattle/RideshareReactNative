@@ -27,20 +27,20 @@ const DadosEmpresa = ({ route, navigation }) => {
     }, []);
 
     const handleContinue = () => {
-        const newDetails = {
-            ...updatedUserDetails,
-            nomeEmpresa,
-            cargo,
-            codigo,
-            rua,
-            cidade,
-            estado,
-            pais,
-            cep,
-            numero
-        };
-        console.log(newDetails);
-        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
+
+        console.log("O da empresa: ");
+        console.log(userDetails);
+        if(nomeEmpresa && cargo && codigo && rua && cidade && estado && pais && cep && numero ) {
+            const dadosEndereco = {"rua": rua, "cidade": cidade, "estado": estado, "pais": pais, "cep": cep, "numero": numero};
+            const dadosEmpresa = {"nomeEmpresa": nomeEmpresa, "cargo": cargo, "codigo": codigo, "dadosEndereco": dadosEndereco};
+
+            updatedUserDetails.dadosEmpresa.data = dadosEmpresa;
+            updatedUserDetails.dadosEmpresa.status = 'Etapa concluída';
+            console.log(updatedUserDetails);
+            navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "dadosEmpresa" });
+        } else {
+            alert("Por favor, preencha todos os campos!");
+        }
     };
     
 

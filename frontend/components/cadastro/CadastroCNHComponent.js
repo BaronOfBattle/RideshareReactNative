@@ -39,16 +39,17 @@ const CadastroCNH = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        const newDetails = {
-            ...updatedUserDetails,
-            registroCNH,
-            cpf,
-            fotoCNH: image
-        };
-        
-        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
+        if (registroCNH && cpf && image) {
+            const dadosCNH = { "registroCNH": registroCNH, "cpf": cpf, "fotoCNH": image };
+            updatedUserDetails.cadastroCNH.data = dadosCNH;
+            updatedUserDetails.cadastroCNH.status = 'Etapa concluída';
+
+            navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "cadastroCNH" });
+        } else {
+            alert("Para prosseguir você deve preencher todos os campos e selecionar a foto da sua CNH!");
+        }
     };
-    
+
 
 
     return (
@@ -123,7 +124,6 @@ const styles = StyleSheet.create({
     continuar: {
         borderTopWidth: 1.2,
         borderTopColor: "#EEE",
-        marginTop: 70,
     },
     botaoContinuar: {
         marginHorizontal: 40,

@@ -17,6 +17,9 @@ let Address = new Schema({
     cep: {
         type: String
     }, 
+    number: {
+        type: String
+    }, 
 }, {
     collection: "address"
 });

@@ -42,19 +42,16 @@ const DadosAutomovel = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        const newDetails = {
-            ...updatedUserDetails,
-            tipoAutomovel,
-            marca,
-            modelo,
-            placa,
-            cor,
-            fotoDocumento: image
-        };
-        console.log(newDetails);
-        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
+        if (tipoAutomovel && marca && modelo && placa && cor && image) {
+            const dadosAutomovel = { "tipoAutomovel": tipoAutomovel, "marca": marca, "modelo": modelo, "placa": placa, "cor": cor, "fotoDocumento": image };
+            updatedUserDetails.dadosAutomovel.data = dadosAutomovel;
+            updatedUserDetails.dadosAutomovel.status = 'Etapa concluída';
+            navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "dadosAutomovel" });
+        } else {
+            alert("Para prosseguir você deve preencher todos os campos e selecionar a foto do documento do seu veículo!")
+        }
     };
-    
+
 
 
     return (

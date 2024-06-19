@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import { UserContext } from './UserContext';
 import AppBar from './AppBarComponent';
 import { CustomText } from './CustomTextComponent';
 import BotaoComponent from './BotaoComponent';
+
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
 
 
 export function LoginComponent({ navigation }) {
@@ -16,7 +19,7 @@ export function LoginComponent({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.0.10:3000/user/login', {
+      const response = await fetch(`${apiUrl}user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

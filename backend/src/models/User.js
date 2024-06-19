@@ -21,7 +21,7 @@ let User = new Schema({
     userCategory: {
         type: String
     }, 
-    profilePictureAddres: {
+    profilePictureAddress: {
         type: String
     }, 
     registrationCNH: {

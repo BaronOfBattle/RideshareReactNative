@@ -5,7 +5,7 @@ import { CustomText } from '../CustomTextComponent';
 import BotaoComponent from '../BotaoComponent';
 
 export function SelecionarCategoria({ route, navigation }) {
-    const { userDetails, setUserDetails } = route.params;
+    const { userDetails } = route.params;
     const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
 
 

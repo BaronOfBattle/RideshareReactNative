@@ -4,10 +4,12 @@ const path = require("path");
 const fs = require('fs');
 const { addVehicle } = require('./vehicleController');
 const { addCompany } = require('./companyController');
+const { addAddress } = require('./addressController');
 
 let User = require('../models/User');
 let Company = require('../models/Company');
 let Vehicle = require('../models/Vehicle');
+let Address = require('../models/Address');
 
 const app = express();
 app.use(cors());
@@ -16,77 +18,52 @@ app.use(bodyParser.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const saveImage = (buffer, filename) => {
-    const directoryPath = '../frontend/assets';
+const saveImage = (filePath, filename) => {
+    const directoryPath = path.join(__dirname, '../../../frontend/assets');
+    const destinationPath = path.join(directoryPath, filename);
+    console.log("eleeee");
+    console.log(filePath);
+    if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(directoryPath, { recursive: true });
+    }
 
-    const filePath = path.join(directoryPath, filename);
-
-    fs.writeFile(filePath, buffer, 'binary', err => {
+    fs.copyFile(filePath, destinationPath, err => {
         if (err) {
             console.error('Erro ao salvar a imagem:', err);
         } else {
-            console.log(`Imagem ${filename} salva com sucesso em ${filePath}.`);
+            console.log(`Imagem ${filename} salva com sucesso em ${destinationPath}.`);
         }
     });
 };
 
-exports.cadastro = async (req, res) => {
-    const dadosUser = {
-        fullName: req.body.nome,
-        email: req.body.email,
-        dataNasc: req.body.dataNascimento,
-        pronoum: req.body.pronome,
-        password: req.body.senha,
-        userCategory: req.body.categoria,
-        profilePictureAddres: "",
-        registrationCNH: req.body.registroCNH,
-        cpf: req.body.cpf,
-        CNHPictureAddress: "",
-    };
 
+
+exports.cadastro = async (req, res) => {
+    const dadosUser = JSON.parse(req.body.userData);
     
     try {
         let user = new User(dadosUser);
         await user.save();
-        
-        const companyData = {
-            name: req.body.nomeEmpresa,
-            position: req.body.cargo,
-            code: req.body.codigo,
-            addressId: req.body.addressId,
-            userId: user._id
-        };
-        console.log(req.body.tipoAutomovel);
 
-        const vehicleData = {
-            type: req.body.tipoAutomovel,
-            brand: req.body.marca,
-            model: req.body.modelo,
-            plate: req.body.placa,
-            color: req.body.cor,
-            documentPictureAddress: "",
-            userId: user._id
-        };
-        console.log("Dados: " + companyData);
-        console.log("Dados: " + vehicleData.type);
-        
-        await addVehicle(req, res, vehicleData);
+        const addressData = JSON.parse(req.body.addressData);
+        let address = new Address(addressData);
+        await address.save();
+
+        const companyData = JSON.parse(req.body.companyData);
+        companyData.userId = user._id;
+        companyData.addressId = address._id;
+        const vehicleData = JSON.parse(req.body.vehicleData);
+
+        vehicleData.type ? await addVehicle(req, res, vehicleData) : null;
         await addCompany(req, res, companyData);
 
         req.files.forEach(file => {
-            saveImage(file.buffer, file.originalname);
-            if (file.fieldname === 'fotoPerfil') {
-                user.profilePictureAddres = file.originalname;
-            } else if (file.fieldname === 'fotoDocumento') {
-                vehicle.documentPictureAddress = file.originalname;
-            } else if (file.fieldname === 'fotoCNH') {
-                user.CNHPictureAddress = file.originalname;
-            }
-        });
+            // saveImage(file.path, file.originalname);
+        });        
 
         await user.save();
 
-        res.status(201).json({ 'status': 'success', 'mssg': 'Cadastro realizado com sucesso' });
+        res.status(201).json(user);
     } catch (err) {
         console.error('Erro ao salvar:', err);
         res.status(500).json({ 'status': 'failure', 'mssg': 'Erro ao salvar no banco de dados' });

@@ -30,7 +30,7 @@ export function CadastroComponent({ navigation }) {
 
     const handleContinue = () => {
         if (checked && userDetails.senha === userDetails.confirmarSenha) {
-          navigation.navigate('selecCategoria', { userDetails, setUserDetails });
+          navigation.navigate('selecCategoria', { userDetails });
           setShowError(false);
         } else {
           setShowError(true);

@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   },
   appBarAjuda: {
     color: "#79c61e",
+    marginLeft: 80
   },
 
 });

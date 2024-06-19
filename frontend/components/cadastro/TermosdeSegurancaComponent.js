@@ -18,12 +18,9 @@ const TermosDeSeguranca = ({ route, navigation }) => {
     }, []);
 
     const handleContinue = () => {
-        const newDetails = {
-            ...updatedUserDetails,
-            termosAceitos, 
-        };
-        console.log(newDetails);
-        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
+        updatedUserDetails.termosDeSeguranca.data = termosAceitos, 
+        updatedUserDetails.termosDeSeguranca.status = 'Etapa concluída';
+        navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "termosDeSeguranca" });
     };
 
 

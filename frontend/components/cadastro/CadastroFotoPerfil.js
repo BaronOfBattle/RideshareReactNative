@@ -9,7 +9,7 @@ import BotaoComponent from '../BotaoComponent';
 const FotoPerfil = ({ route, navigation }) => {
     const { userDetails } = route.params;
     const [updatedUserDetails, setUpdatedUserDetails] = useState(userDetails);
-    const selectedOption = route.params;
+    const { selectedOption } = route.params;
 
     useEffect(() => {
         return () => {
@@ -27,7 +27,6 @@ const FotoPerfil = ({ route, navigation }) => {
             quality: 1,
         });
 
-        console.log(result);
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
@@ -35,10 +34,16 @@ const FotoPerfil = ({ route, navigation }) => {
     };
 
     const handleContinue = () => {
-        const newDetails = { ...updatedUserDetails, fotoPerfil: image };
-        console.log(newDetails);
-        navigation.navigate("cadastroMotorista", { userDetails: newDetails, selectedOption: selectedOption });
+        if (image) {
+            updatedUserDetails.fotoPerfil.data = image;
+            updatedUserDetails.fotoPerfil.status = 'Etapa concluída';
+            console.log(updatedUserDetails);
+            navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "fotoPerfil" });
+        } else {
+            alert("Por favor, selecione uma foto de perfil para continuar.");
+        }
     };
+    
 
     return (
         <View style={styles.container}>
