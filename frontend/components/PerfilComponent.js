@@ -21,12 +21,12 @@ export function Perfil({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <AppBar imgPerfil={true} menu={true} />
+            <AppBar menu={true} />
             <ScrollView>
                 <View style={styles.top}>
                         <TouchableOpacity>
                             <Image
-                                source={require("../assets/fotoPerfil.jpg")}
+                                source={{ uri: `${user.profilePictureAddress}`}}
                                 style={styles.topImage}
                             />
                         </TouchableOpacity>

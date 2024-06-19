@@ -3,6 +3,7 @@ const { BlobServiceClient } = require('@azure/storage-blob');
 const multer = require('multer');
 const path = require("path");
 const fs = require('fs');
+const fs1 = require('fs').promises;
 require('dotenv').config();
 
 
@@ -25,21 +26,30 @@ const upload = multer({ storage: storage });
 const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
 async function saveImageToAzure(fileBuffer, filename) {
-  const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
-  const containerName = 'rideshare';
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-  const blobClient = containerClient.getBlockBlobClient(filename);
+    const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+    const containerName = 'rideshare';
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlockBlobClient(filename);
 
-  await blobClient.upload(fileBuffer, fileBuffer.length);
+    await blobClient.upload(fileBuffer, fileBuffer.length);
 
-  return blobClient.url;
+    await blobClient.setHTTPHeaders({
+        blobContentDisposition: 'inline; filename="' + filename + '"'
+    });
+
+    console.log(blobClient.url);
+    return blobClient.url;
 }
 
+
+async function getBufferFromFile(filePath) {
+    return await fs1.readFile(filePath);
+}
 
 
 exports.cadastro = async (req, res) => {
     const dadosUser = JSON.parse(req.body.userData);
-    
+
     try {
         let user = new User(dadosUser);
         await user.save();
@@ -53,23 +63,23 @@ exports.cadastro = async (req, res) => {
         companyData.addressId = address._id;
         const vehicleData = JSON.parse(req.body.vehicleData);
 
-        vehicleData.type ? await addVehicle(req, res, vehicleData) : null;
         await addCompany(req, res, companyData);
 
         for (const file of req.files) {
-            const imageUrl = await saveImageToAzure(file.buffer, file.originalname);
-      
-            if (file.fieldname === 'CNHPictureAddress') {
-              user.CNHPictureAddress = imageUrl;
-            } else if (file.fieldname === 'documentPictureAddress') {
-              // vehicle.documentPictureAddress = imageUrl;
-            } else if (file.fieldname === 'profilePictureAddress') {
-              user.profilePictureAddress = imageUrl;
+            const fileBuffer = await getBufferFromFile(file.path);
+            const imageUrl = await saveImageToAzure(fileBuffer, file.filename);
+
+            if (file.fieldname === 'fotoCNH') {
+                user.CNHPictureAddress = imageUrl;
+            } else if (file.fieldname === 'fotoDocumento') {
+                vehicleData.documentPictureAddress = imageUrl;
+            } else if (file.fieldname === 'fotoPerfil') {
+                user.profilePictureAddress = imageUrl;
             }
-          }
-      
-          await user.save();
-          if (vehicle) await vehicle.save();
+        }
+        vehicleData.type ? await addVehicle(req, res, vehicleData) : null;
+
+        await user.save();
 
         res.status(201).json(user);
     } catch (err) {
@@ -101,3 +111,22 @@ exports.getUserById = async function (req, res) {
         res.status(400).send({ 'status': 'failure', 'mssg': err });
     })
 }
+
+
+function deleteUploadsFolder() {
+    const uploadsPath = path.join(__dirname, '../uploads');
+
+    if (fs.existsSync(uploadsPath)) {
+        fs.rm(uploadsPath, { recursive: true, force: true }, (err) => {
+            if (err) {
+                console.error('Erro ao deletar a pasta uploads:', err);
+            } else {
+                console.log('Pasta uploads deletada com sucesso.');
+            }
+        });
+    } else {
+        console.log('A pasta uploads não existe.');
+    }
+}
+
+setInterval(deleteUploadsFolder, 1200000);

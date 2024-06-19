@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { UserContext } from './UserContext';
 import { CustomText } from './CustomTextComponent';
 
 export function AppBar({ texto, imgPerfil, menu }) {
+  const { user } = useContext(UserContext);
+
   return (
     <View style={styles.appBar}>
       <Image
@@ -13,7 +16,7 @@ export function AppBar({ texto, imgPerfil, menu }) {
       <View style={{ flexDirection: 'row', }}>
         {imgPerfil &&
           <Image
-            source={require("../assets/fotoPerfil.jpg")}
+            source={{ uri: `${user.profilePictureAddress}`}}
             style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: "#EEE" }}
           />
         }
