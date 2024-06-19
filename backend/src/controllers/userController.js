@@ -1,7 +1,11 @@
 const express = require('express');
+const { BlobServiceClient } = require('@azure/storage-blob');
 const multer = require('multer');
 const path = require("path");
 const fs = require('fs');
+require('dotenv').config();
+
+
 const { addVehicle } = require('./vehicleController');
 const { addCompany } = require('./companyController');
 const { addAddress } = require('./addressController');
@@ -18,23 +22,18 @@ app.use(bodyParser.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const saveImage = (filePath, filename) => {
-    const directoryPath = path.join(__dirname, '../../../frontend/assets');
-    const destinationPath = path.join(directoryPath, filename);
-    console.log("eleeee");
-    console.log(filePath);
-    if (!fs.existsSync(directoryPath)) {
-        fs.mkdirSync(directoryPath, { recursive: true });
-    }
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
-    fs.copyFile(filePath, destinationPath, err => {
-        if (err) {
-            console.error('Erro ao salvar a imagem:', err);
-        } else {
-            console.log(`Imagem ${filename} salva com sucesso em ${destinationPath}.`);
-        }
-    });
-};
+async function saveImageToAzure(fileBuffer, filename) {
+  const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+  const containerName = 'rideshare';
+  const containerClient = blobServiceClient.getContainerClient(containerName);
+  const blobClient = containerClient.getBlockBlobClient(filename);
+
+  await blobClient.upload(fileBuffer, fileBuffer.length);
+
+  return blobClient.url;
+}
 
 
 
@@ -57,11 +56,20 @@ exports.cadastro = async (req, res) => {
         vehicleData.type ? await addVehicle(req, res, vehicleData) : null;
         await addCompany(req, res, companyData);
 
-        req.files.forEach(file => {
-            // saveImage(file.path, file.originalname);
-        });        
-
-        await user.save();
+        for (const file of req.files) {
+            const imageUrl = await saveImageToAzure(file.buffer, file.originalname);
+      
+            if (file.fieldname === 'CNHPictureAddress') {
+              user.CNHPictureAddress = imageUrl;
+            } else if (file.fieldname === 'documentPictureAddress') {
+              // vehicle.documentPictureAddress = imageUrl;
+            } else if (file.fieldname === 'profilePictureAddress') {
+              user.profilePictureAddress = imageUrl;
+            }
+          }
+      
+          await user.save();
+          if (vehicle) await vehicle.save();
 
         res.status(201).json(user);
     } catch (err) {

@@ -16,6 +16,7 @@
   "author": "Equipe Rideshare TADS028",
   "license": "ISC",
   "dependencies": {
+    "@azure/storage-blob": "^12.23.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
