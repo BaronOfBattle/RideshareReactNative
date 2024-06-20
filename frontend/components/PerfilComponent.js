@@ -1,15 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { UserContext } from './UserContext';
+import Constants from 'expo-constants';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import { useCustomBackButton } from "./CustomBackButtonComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
+
 export function Perfil({ navigation }) {
     useCustomBackButton(navigation);
     const { user } = useContext(UserContext);
+    const [company, setCompany] = useState(null);
+
+    useEffect(() => {
+        const fetchCompany = async () => {
+            try {
+                const response = await fetch(`${apiUrl}company/company/user/${user?._id}`);
+                const data = await response.json();
+                setCompany(data.company);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (user) {
+            fetchCompany();
+        }
+    }, [company]);
 
     const nome = user.fullName;
     const avaliacao = '4.8';
@@ -24,16 +44,16 @@ export function Perfil({ navigation }) {
             <AppBar menu={true} />
             <ScrollView>
                 <View style={styles.top}>
-                        <TouchableOpacity>
-                            <Image
-                                source={{ uri: `${user.profilePictureAddress}`}}
-                                style={styles.topImage}
-                            />
-                        </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={{ uri: `${user.profilePictureAddress}` }}
+                            style={styles.topImage}
+                        />
+                    </TouchableOpacity>
                     <View style={styles.topInfo}>
-                        <CustomText style={styles.topInfoText}>{nome}</CustomText>
+                        <CustomText style={styles.topInfoText}>{user.fullName}</CustomText>
                         <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>
-                        <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
+                        <CustomText style={styles.topInfoText}>{company?.position} - {company?.name}</CustomText>
                         <CustomText style={styles.topInfoText}>{corridas} Corridas - {caronas} Caronas</CustomText>
                     </View>
                 </View>
@@ -70,16 +90,17 @@ export function Perfil({ navigation }) {
                         <CustomText style={styles.midViagemTexto}>Terminal Integrado Pelópidas</CustomText>
                     </View>
                 </View>
-                <BotaoComponent
+                {/*<BotaoComponent
                     texto={"Solicitar Viagem"}
                     onPress={() => { navigation.navigate('solicitarViagem'); }}
                     estilo={styles.botaoSolicitarViagem}
                 />
-                {/* <BotaoComponent
+                 <BotaoComponent
 texto={"Anunciar Viagem"}
 onPress={() => { navigation.navigate('anunciarViagem'); }}
 estilo={styles.botaoSolicitarViagem}
 /> */}
+                <View style={styles.margin}></View>
             </ScrollView>
             <BottomBar navigation={navigation} />
         </View>
@@ -125,6 +146,9 @@ const styles = StyleSheet.create({
     midViagemTexto: {
         margin: 3,
     },
+    margin: {
+        marginBottom: 50
+    }, 
     botaoSolicitarViagem: {
         marginLeft: 40,
         marginBottom: 80,

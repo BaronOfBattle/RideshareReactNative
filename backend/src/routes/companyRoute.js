@@ -58,6 +58,15 @@ companyRoute.route('/company/:id').get(function (req, res) {
   })
 });
 
+companyRoute.route('/company/user/:userId').get(function (req, res) {
+  let id = req.params.userId;
+  Company.findByUserId(id).then(company => {
+    res.status(200).json({ 'status': 'success', 'company': company });
+  }).catch(err => {
+    res.status(400).send({ 'status': 'failure', 'mssg': err });
+  })
+});
+
 companyRoute.route('/user/:id').get(function (req, res) {
   let id = req.params.id;
   Company.findByUserId(id).then(company => {
