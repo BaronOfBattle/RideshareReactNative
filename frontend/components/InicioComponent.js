@@ -46,16 +46,16 @@ export function Inicio({ navigation }) {
                 try {
                     const response = await fetch(`${apiUrl}tripDriver/${viagem?._id}/${viagem?.destinationAddressId}`);
                     const data = await response.json();
-                    const caronasWithDriversAndAddresses = data.tripDrivers.map(tripDriver => ({
+                    const caronasWithDriversAndAddresses = data.tripDrivers?.map(tripDriver => ({
                         ...tripDriver,
                         motoristas: data.drivers.filter(driver => driver._id === tripDriver.tripDriver.userId),
+                        veiculos: data.vehicles.filter(vehicle => vehicle.userId === tripDriver.tripDriver.userId),
                         enderecosFrom: data.addressesFrom.filter(address => address._id === tripDriver.tripDriver.fromAddressId),
                         enderecosDestination: data.addressesDestination.filter(address => address._id === tripDriver.tripDriver.destinationAddressId)
                     }));
-
                     setCaronas(caronasWithDriversAndAddresses);
                 } catch (error) {
-                    console.error('Erro ao buscar dados', error);
+                    console.error('Sem dados');
                 }
             } else {
                 try {
@@ -70,7 +70,7 @@ export function Inicio({ navigation }) {
                     }));
                     setCaronas(caronasWithDriversAndAddresses);
                 } catch (error) {
-                    console.error('Erro ao buscar dados', error);
+                    console.error('Sem dados');
                 }
 
             }
@@ -101,7 +101,7 @@ export function Inicio({ navigation }) {
             }
 
             try {
-                const response = await fetch(`${apiUrl}tripPassenger/pedirCarona/${user._id}/${caronaSelecionada?._id}`, {
+                const response = await fetch(`${apiUrl}tripPassenger/pedirCarona/${user?._id}/${caronaSelecionada?._id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -130,27 +130,12 @@ export function Inicio({ navigation }) {
     }
     const [isCarro, setIsCarro] = useState(true);
 
-    const nome = 'João';
-    const cargo = 'Professor';
-    const tipoCarona = 'IDA';
-    const valor = '4,00';
-    const empresa = 'FAC SENAC';
-    const marcaCarro = 'FIAT';
-    const modeloCarro = 'UNO 1.0 FIRE FLEX';
-
-    const horaSaida = '17:30';
-    const enderecoPartida = 'Faculdade SENAC';
-    const enderecoPartidaEndereco = 'R. do Pombal, 57 — Santo Amaro — Recife';
-    const enderecoDestino = 'TI Pelópidas';
-    const enderecoDestinoEndereco = 'Terminal Integrado Pelópidas — Paulista';
-
-    const vagas = "2/3";
 
     return (
         <View style={styles.container}>
             <AppBar imgPerfil={true} menu={true} />
-            {(user.userCategory === "2") && <ScrollView>
-                {(user.userCategory === "2") &&
+            {(user.userCategory === "2") && 
+                (user.userCategory === "2") &&
                     <View style={styles.tipoViagem}>
                         <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
                             onPress={() => { setpassageiroSelected(true), setmotoristaSelected(false) }}
@@ -161,8 +146,7 @@ export function Inicio({ navigation }) {
                         >
                             <CustomText style={motoristaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>MOTORISTA</CustomText></TouchableOpacity>
                     </View>}
-            </ScrollView>
-            }
+
             {(((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)) &&
                 <ScrollView>
 
