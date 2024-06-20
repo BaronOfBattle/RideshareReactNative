@@ -1,34 +1,95 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import { UserContext } from "./UserContext";
+import { ViagemContext } from "./ViagensContext";
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
-export function AcompanharViagem({ navigation, showAppBar = true, home = true }) {
+export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar = true, home = true, }) {
+    const { user } = useContext(UserContext);
+    const { viagem } = useContext(ViagemContext);
+    const [partida, setPartida] = useState(null);
+    const [destino, setDestino] = useState(null);
+    const [passengers, setPassengers] = useState(null);
+
+    const [tripDriver, setTripDriver] = useState(null);
+
+    useEffect(() => {
+        const fetchTripDriver = async () => {
+            try {
+                const response = await fetch(`http://192.168.0.10:3000/tripDriver/${viagem._id}`);
+                const data = await response.json();
+                setTripDriver(data.tripDrivers);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (viagem) {
+            fetchTripDriver();
+        }
+    }, [viagem]);
+
+    useEffect(() => {
+        const fetchFromAddress = async () => {
+            try {
+                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.fromAddresId}`);
+                const data = await response.json();
+                setPartida(data);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (!partida) {
+            fetchFromAddress();
+        }
+    }, [partida]);
+
+    useEffect(() => {
+        const fetchToAddress = async () => {
+            try {
+                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.destinationAddressId}`);
+                const data = await response.json();
+                setDestino(data);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (!destino) {
+            fetchToAddress();
+        }
+    }, [destino]);
+    
+    useEffect(() => {
+        const fetchTripPassengers = async () => {
+            try {
+                const response = await fetch(`http://192.168.0.10:3000/tripPassengers/${viagem?.fromAddresId}/${viagem.destinationAddressId}`);
+                const data = await response.json();
+                setPassengers(data);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (!passengers) {
+            fetchTripPassengers();
+        }
+    }, [passengers]);
 
     const nome = 'João';
     const cargo = 'Professor';
     const avaliacao = '4.8';
-    const tipoCarona = 'IDA';
-    const valor = '4,00';
     const empresa = 'FAC SENAC';
-    const marcaCarro = 'FIAT';
-    const modeloCarro = 'UNO 1.0 FIRE FLEX';
-
-    const horaSaida = '17:30';
-    const enderecoPartida = 'Faculdade SENAC';
-    const enderecoPartidaEndereco = 'R. do Pombal, 57 — Santo Amaro — Recife';
-    const enderecoDestino = 'TI Pelópidas';
-    const enderecoDestinoEndereco = 'Terminal Integrado Pelópidas — Paulista';
-
-    const vagas = "2/3";
 
     return (
         <View style={styles.container}>
             {showAppBar && <AppBar imgPerfil={true} menu={true} />}
             <ScrollView>
-                { home && 
+                {home &&
                     <View style={styles.top}>
                         <BotaoComponent
                             texto={"INICIAR VIAGEM"}
@@ -39,80 +100,78 @@ export function AcompanharViagem({ navigation, showAppBar = true, home = true })
                     </View>
                 }
                 <View style={styles.mid}>
-                    <CustomText style={styles.titulo}>ACOMPANHE SUA VIAGEM</CustomText>
-                    <View style={styles.midViagem}>
-                        <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                        <CustomText style={styles.midViagemTextoVagas}>VAGAS OCUPADAS: {vagas}</CustomText>
-                        <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
-                        <CustomText style={styles.midViagemTextoPartida}>DE: {enderecoPartida}</CustomText>
-                        <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
-                        <CustomText style={styles.midViagemTextoDestino}>PARA: {enderecoDestino}</CustomText>
-                        <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
-                    </View>
-                    <CustomText style={styles.tituloBottom}>SOLICITAÇÕES DE PASSAGEIROS</CustomText>
-                    <View style={styles.midPassageiros}>
-                        <View style={styles.midPassageirosInfoImg}>
-                            <View style={styles.midPassageirosInfo}>
-                                <CustomText style={styles.topInfoText}>{nome}</CustomText>
-                                <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
-                                <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>
+                    <CustomText style={styles.titulo}>{"ACOMPANHE SUA VIAGEM"}</CustomText>
+                        <View style={styles.midViagem}>
+                            <CustomText style={styles.topInfoTextTipoValor}>{viagem?.oneWay ? "IDA" : "IDA E VOLTA"} - R$ {viagem?.price}</CustomText>
+                            <CustomText style={styles.midViagemTextoVagas}>VAGAS OCUPADAS: {viagem?.availableSeats - 3}/{viagem?.availableSeats}</CustomText>
+                            <CustomText style={styles.midViagemTextoHorario}>{viagem?.startTime}</CustomText>
+                            <CustomText style={styles.midViagemTextoPartida}>DE: {partida?.addresss?.street}</CustomText>
+                            <CustomText style={styles.midViagemTexto}>{partida?.addresss?.street}, {(partida?.addresss?.number) ? partida?.addresss?.number : "S/N"} — {partida?.addresss?.city}, {partida?.addresss?.state}</CustomText>
+                            <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.addresss?.street}</CustomText>
+                            <CustomText style={styles.midViagemTexto}>{destino?.addresss?.street}, {(destino?.addresss?.number) ? destino?.addresss?.number : "S/N"} — {destino?.addresss?.city}, {destino?.addresss?.state}</CustomText>
+                        </View>
+                    <CustomText style={styles.tituloBottom}>{"SOLICITAÇÕES DE PASSAGEIROS"}</CustomText>
+                        <View style={styles.midPassageiros}>
+                            <View style={styles.midPassageirosInfoImg}>
+                                <View style={styles.midPassageirosInfo}>
+                                    <CustomText style={styles.topInfoText}>{nome}</CustomText>
+                                    <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
+                                    <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>
+                                </View>
+                                <TouchableOpacity>
+                                    <Image
+                                        source={require("../assets/fotoDocumento.jpg")}
+                                        style={styles.midPassageirosImage}
+                                    />
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity>
-                                <Image
-                                    source={require("../assets/fotoDocumento.jpg")}
-                                    style={styles.midPassageirosImage}
+                            <View style={styles.continuar}>
+                                <BotaoComponent
+                                    texto={"Recusar"}
+                                    onPress={() => { console.log("Recusou a solicitação de João") }}
+                                    estilo={styles.botaoRecusar}
+                                    estiloTexto={styles.botaoTexto}
                                 />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.continuar}>
-                            <BotaoComponent
-                                texto={"Recusar"}
-                                onPress={() => { console.log("Recusou a solicitação de João") }}
-                                estilo={styles.botaoRecusar}
-                                estiloTexto={styles.botaoTexto}
-                            />
-                            <BotaoComponent
-                                texto={"Aceitar"}
-                                onPress={() => { console.log("Aceitou a solicitação de João") }}
-                                estilo={styles.botaoAceitar}
-                                estiloTexto={styles.botaoTexto}
-                            />
-                        </View>
-
-                    </View>
-                    <View style={[styles.midPassageiros, { marginTop: 25, marginBottom: 50, }]}>
-                        <View style={styles.midPassageirosInfoImg}>
-                            <View style={styles.midPassageirosInfo}>
-                                <CustomText style={styles.topInfoText}>Maria</CustomText>
-                                <CustomText style={styles.topInfoText}>PROFESSORA - FAC SENAC</CustomText>
-                                <CustomText style={styles.topInfoText}>4.8</CustomText>
+                                <BotaoComponent
+                                    texto={"Aceitar"}
+                                    onPress={() => { console.log("Aceitou a solicitação de João") }}
+                                    estilo={styles.botaoAceitar}
+                                    estiloTexto={styles.botaoTexto}
+                                />
                             </View>
-                            <TouchableOpacity>
-                                <Image
-                                    source={require("../assets/fotoDocumento.jpg")}
-                                    style={styles.midPassageirosImage}
+                        </View>
+                        <View style={[styles.midPassageiros, { marginTop: 25, marginBottom: 50, }]}>
+                            <View style={styles.midPassageirosInfoImg}>
+                                <View style={styles.midPassageirosInfo}>
+                                    <CustomText style={styles.topInfoText}>Maria</CustomText>
+                                    <CustomText style={styles.topInfoText}>PROFESSORA - FAC SENAC</CustomText>
+                                    <CustomText style={styles.topInfoText}>4.8</CustomText>
+                                </View>
+                                <TouchableOpacity>
+                                    <Image
+                                        source={require("../assets/fotoDocumento.jpg")}
+                                        style={styles.midPassageirosImage}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.continuar}>
+                                <BotaoComponent
+                                    texto={"Recusar"}
+                                    onPress={() => { console.log("Recusou a solicitação de Maria") }}
+                                    estilo={styles.botaoRecusar}
+                                    estiloTexto={styles.botaoTexto}
                                 />
-                            </TouchableOpacity>
+                                <BotaoComponent
+                                    texto={"Aceitar"}
+                                    onPress={() => { console.log("Aceitou a solicitação de Maria") }}
+                                    estilo={styles.botaoAceitar}
+                                    estiloTexto={styles.botaoTexto}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.continuar}>
-                            <BotaoComponent
-                                texto={"Recusar"}
-                                onPress={() => { console.log("Recusou a solicitação de Maria") }}
-                                estilo={styles.botaoRecusar}
-                                estiloTexto={styles.botaoTexto}
-                            />
-                            <BotaoComponent
-                                texto={"Aceitar"}
-                                onPress={() => { console.log("Aceitou a solicitação de Maria") }}
-                                estilo={styles.botaoAceitar}
-                                estiloTexto={styles.botaoTexto}
-                            />
-                        </View>
-
-                    </View>
                 </View>
             </ScrollView>
-            <BottomBar navigation={navigation} />
+            { showBottomBar && <BottomBar navigation={navigation} />}
         </View>
     );
 }

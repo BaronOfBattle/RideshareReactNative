@@ -23,6 +23,14 @@ addressRoute.route('/').get(function (req, res) {
     });
 });
 
+addressRoute.route('/:id').get(function (req, res) {
+    Address.findById(req.params.id).then(address => {
+        res.status(200).json({ 'status': 'success', 'addresss': address });
+    }).catch(err => {
+        res.status(400).send({ 'status': 'failure', 'mssg': 'Something went wrong' });
+    });
+});
+
 addressRoute.route('/update/:id').post(async function (req, res) {
     try {
         let address = await Address.findById(req.params.id);

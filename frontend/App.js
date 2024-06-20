@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
 import { UserProvider } from './components/UserContext';
+import { ViagemProvider } from './components/ViagensContext';
 import LoginComponent from './components/LoginComponent';
 import CadastroComponent from './components/cadastro/CadastroComponent';
 import { ConfirmarEmailComponent } from './components/cadastro/CadastroConfirmarEmailComponent';
@@ -47,31 +48,33 @@ export default function App() {
   } else {
     return (
       <UserProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginComponent} />
-          <Stack.Screen name="Cadastro" component={CadastroComponent} />
-          <Stack.Screen name="ConfirmarEmail" component={ConfirmarEmailComponent} />
-          <Stack.Screen name="selecCategoria" component={SelecionarCategoria} />
-          <Stack.Screen name="fotoPerfil" component={FotoPerfil} />
-          <Stack.Screen name="dadosEmpresa" component={DadosEmpresa} />
-          <Stack.Screen name="dadosAutomovel" component={DadosAutomovel} />
-          <Stack.Screen name="cadastroCNH" component={CadastroCNH} />
-          <Stack.Screen name="termosDeSeguranca" component={TermosDeSeguranca} />
-          <Stack.Screen name="cadastroMotorista" component={CadatroMotorista} />
-          <Stack.Screen name="bemVindo" component={BemVindo} />
-          <Stack.Screen name="Perfil" component={Perfil} />
-          <Stack.Screen name="solicitarViagem" component={SolicitarViagem} />
-          <Stack.Screen name="solicitarCarona" component={SolicitarCarona} />
-          <Stack.Screen name="anunciarViagem" component={AnunciarViagem} />
-          <Stack.Screen name="acompanharViagem" component={AcompanharViagem} />
-          <Stack.Screen name="resumoViagem" component={ResumoViagem} />
-          <Stack.Screen name="avaliar" component={AvaliarPassageiros} />
-          <Stack.Screen name="avaliarMotorista" component={AvaliarMotorista} />
-          <Stack.Screen name="Chat" component={Chat} />
-          <Stack.Screen name="Inicio" component={Inicio} />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <ViagemProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Login" component={LoginComponent} />
+              <Stack.Screen name="Cadastro" component={CadastroComponent} />
+              <Stack.Screen name="ConfirmarEmail" component={ConfirmarEmailComponent} />
+              <Stack.Screen name="selecCategoria" component={SelecionarCategoria} />
+              <Stack.Screen name="fotoPerfil" component={FotoPerfil} />
+              <Stack.Screen name="dadosEmpresa" component={DadosEmpresa} />
+              <Stack.Screen name="dadosAutomovel" component={DadosAutomovel} />
+              <Stack.Screen name="cadastroCNH" component={CadastroCNH} />
+              <Stack.Screen name="termosDeSeguranca" component={TermosDeSeguranca} />
+              <Stack.Screen name="cadastroMotorista" component={CadatroMotorista} />
+              <Stack.Screen name="bemVindo" component={BemVindo} />
+              <Stack.Screen name="Perfil" component={Perfil} />
+              <Stack.Screen name="solicitarViagem" component={SolicitarViagem} />
+              <Stack.Screen name="solicitarCarona" component={SolicitarCarona} />
+              <Stack.Screen name="anunciarViagem" component={AnunciarViagem} />
+              <Stack.Screen name="acompanharViagem" component={AcompanharViagem} />
+              <Stack.Screen name="resumoViagem" component={ResumoViagem} />
+              <Stack.Screen name="avaliar" component={AvaliarPassageiros} />
+              <Stack.Screen name="avaliarMotorista" component={AvaliarMotorista} />
+              <Stack.Screen name="Chat" component={Chat} />
+              <Stack.Screen name="Inicio" component={Inicio} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ViagemProvider>
       </UserProvider>
     );
   }

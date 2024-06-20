@@ -8,7 +8,7 @@ let TripDriver = new Schema({
         type: Number
     }, 
     startTime: {
-        type: Date
+        type: String
     }, 
     fromAddresId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +27,10 @@ let TripDriver = new Schema({
     }, 
     oneWay: {
         type: Boolean
+    }, 
+    status: {
+        type: String, 
+        default: "Ativa"
     }, 
     userId: {
         type: mongoose.Schema.Types.ObjectId,

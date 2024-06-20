@@ -23,11 +23,15 @@ const companyRoute = require("./src/routes/companyRoute");
 const vehicleRoute = require("./src/routes/vehicleRoute");
 const addressRoute = require("./src/routes/addressRoute");
 
+const tripDriverRoute = require("./src/routes/tripDriverRoute");
+
 app.use('/user', userRoute);
 app.use('/company', companyRoute);
 app.use('/vehicle', vehicleRoute);
 app.use('/address', addressRoute);
-    
+
+app.use('/tripDriver', tripDriverRoute);
+
 app.get("/", function(req, res) {
     res.send("<h1>Servidor rodando com ExpressJS</h1>");
 });

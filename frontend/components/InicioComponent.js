@@ -118,7 +118,7 @@ export function Inicio({ navigation }) {
                         </View>
                     </View>}
                 {(((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
-                    <AcompanharViagem navigation={navigation} showAppBar={false} home={false} />
+                    <AcompanharViagem navigation={navigation} showAppBar={false} showBottomBar={false} home={false} />
                 }
             </ScrollView>
             <BottomBar navigation={navigation} />

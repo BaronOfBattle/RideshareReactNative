@@ -5,22 +5,22 @@ const Schema = mongoose.Schema;
 let Vehicle = new Schema({
     type: {
         type: String
-    }, 
+    },
     brand: {
         type: String
-    }, 
+    },
     model: {
         type: String
-    }, 
+    },
     plate: {
         type: String
-    }, 
+    },
     color: {
         type: String
-    }, 
+    },
     documentPictureAddress: {
         type: String
-    }, 
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -29,4 +29,10 @@ let Vehicle = new Schema({
     collection: "vehicle"
 });
 
-module.exports = mongoose.model("Vehicle", Vehicle);
+Vehicle.statics.findByUserId = function (userId) {
+    return this.findOne({ userId: userId }).populate('userId');
+};
+
+const VehicleModel = mongoose.model("Vehicle", Vehicle);
+
+module.exports = VehicleModel;

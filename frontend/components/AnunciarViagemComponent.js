@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { View, StyleSheet, Text, Image, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { UserContext } from "./UserContext";
+import { ViagemContext } from "./ViagensContext";
+import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { Modal } from 'react-native';
@@ -10,8 +12,12 @@ import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
 
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
+
 export function AnunciarViagem({ navigation }) {
     const { user } = useContext(UserContext);
+    const { setViagem } = useContext(ViagemContext);
+
     const [idaSelected, setIdaSelected] = useState(false);
     const [idaVoltaSelected, setIdaVoltaSelected] = useState(false);
     const [localPartida, setLocalPartida] = useState('');
@@ -26,10 +32,15 @@ export function AnunciarViagem({ navigation }) {
     const [timePickerVisible, setTimePickerVisible] = useState(false);
     const [selectedTime, setSelectedTime] = useState(new Date());
     const [formattedSelectedTime, setFormattedSelectedTime] = useState('');
+    const [vagasDisponiveis, setVagasDisponiveis] = useState(0);
+    const [tipoVeiculo, setTipoVeiculo] = useState("Carro");
+    const [valor, setValor] = useState(2);
 
 
 
     const getLocation = async () => {
+        console.log("user");
+        console.log(user);
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             alert('Permission to access location was denied');
@@ -62,6 +73,45 @@ export function AnunciarViagem({ navigation }) {
     };
 
 
+    const submitData = async () => {
+        const tipoViagem = { tipo: "" };
+        if (idaSelected) {
+            tipoViagem.tipo = idaSelected;
+        } else if (idaVoltaSelected) {
+            tipoViagem.tipo = idaVoltaSelected;
+        }
+        const viagem = {
+            "fromAddresId": localPartida,
+            "destinationAddressId": destino,
+            "startTime": formattedSelectedTime,
+            "availableSeats": vagasDisponiveis,
+            "vehicleType": tipoVeiculo,
+            "price": valor,
+            "oneWay": tipoViagem.tipo,
+            "userId": user._id
+        };
+        try {
+            const response = await fetch(`http://192.168.0.10:3000/tripDriver/cadastro`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(viagem),
+            });
+
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                console.log("Funcionou ou não?????");
+                console.log(jsonResponse);
+                setViagem(jsonResponse.data);
+                navigation.navigate('acompanharViagem', { showAppBar: true, viagem: jsonResponse.data });
+            } else {
+                console.error('Failed to submit data:', response);
+            }
+        } catch (error) {
+            console.error('Failed to submit data:', error);
+        }
+    };
 
 
 
@@ -73,6 +123,7 @@ export function AnunciarViagem({ navigation }) {
                 <View style={styles.viagem}>
                     <CustomText style={styles.titulo}>Anunciar Viagem: </CustomText>
                     <CustomText style={styles.texto}>Preencha os dados da sua viagem.</CustomText>
+                    <View style={modalVisible ? styles.backdrop : styles.backdropNone} />
                     <Modal
                         animationType="slide"
                         transparent={true}
@@ -98,7 +149,11 @@ export function AnunciarViagem({ navigation }) {
                                     style={styles.readyButton}
                                     onPress={() => setModalVisible(!modalVisible)}
                                 >
-                                    <CustomText style={styles.readyButtonText}>Pronto!</CustomText>
+                                    <TouchableOpacity style={styles.botaoProntoModalGreen}
+                                        onPress={() => setModalVisible(!modalVisible)}
+                                    >
+                                        <CustomText style={styles.botaoProntoModalTextoGreen}>PRONTO</CustomText>
+                                    </TouchableOpacity>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -134,7 +189,7 @@ export function AnunciarViagem({ navigation }) {
                                 <TextInput
                                     style={styles.textInput}
                                     placeholder="Horário de saída"
-                                    value={formattedSelectedTime} 
+                                    value={formattedSelectedTime}
                                     editable={false}
                                 />
 
@@ -158,49 +213,61 @@ export function AnunciarViagem({ navigation }) {
                                     keyboardType="number-pad"
                                     textContentType="telephoneNumber"
                                     maxLength={1}
-                                    ></TextInput>
+                                    onChangeText={(text) => {
+                                        const vagas = Number(text);
+                                        setVagasDisponiveis(vagas);
+                                        console.log('Vagas disponíveis:', vagas);
+                                    }}
+
+                                ></TextInput>
                             </TouchableOpacity>
                             <View style={styles.optionLine}><Text></Text></View>
-                            { user && <TouchableOpacity style={styles.option} onPress={null}>
+                            {user && <TouchableOpacity style={styles.option} onPress={null}>
                                 <CustomText style={styles.optionCircle}> </CustomText>
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder="Selecione o veículo"></TextInput>
+                                    onChangeText={setTipoVeiculo}
+                                    placeholder="Selecione o veículo"
+                                >
+                                </TextInput>
                             </TouchableOpacity>}
                             <View style={styles.optionLine}><Text></Text></View>
                             <TouchableOpacity style={styles.option} onPress={null}>
                                 <CustomText style={styles.optionCircle}> </CustomText>
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder="Valor"></TextInput>
+                                    placeholder="Valor"
+                                    onChangeText={(text) => {
+                                        const valor = text;
+                                        setValor(valor)
+                                    }}
+                                >
+                                </TextInput>
                             </TouchableOpacity>
                         </View>
-                        <View style={styles.tipoViagem}>
+                        {!modalVisible && <View style={styles.tipoViagem}>
                             <TouchableOpacity style={idaSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
                                 onPress={() => { setIdaSelected(!idaSelected), setIdaVoltaSelected(false) }}
                             >
-                                <CustomText style={idaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>SÓ IDA</CustomText></TouchableOpacity>
+                                <CustomText style={idaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>SÓ IDA</CustomText>
+                            </TouchableOpacity>
                             <TouchableOpacity style={idaVoltaSelected ? styles.tipoViagemIdaVoltaGreen : styles.tipoViagemIdaVolta}
                                 onPress={() => { setIdaVoltaSelected(!idaVoltaSelected), setIdaSelected(false) }}
                             >
-                                <CustomText style={idaVoltaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>IDA E VOLTA</CustomText></TouchableOpacity>
-                        </View>
-                        <TouchableOpacity style={styles.botaoLocalizacao} onPress={getLocation}>
-                            <CustomText style={styles.botaoLocalizacaoTexto}>Usar Localização Atual</CustomText>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setModalVisible(true)}>
-                            <CustomText>Escolher no Mapa</CustomText>
-                        </TouchableOpacity>
+                                <CustomText style={idaVoltaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>IDA E VOLTA</CustomText>
+                            </TouchableOpacity>
+                        </View>}
                     </View>
                 </View>
-                <View style={styles.continuar}>
+                {!modalVisible && <View style={styles.continuar}>
+                    <View style={modalVisible ? styles.backdrop : styles.backdropNone} />
                     <BotaoComponent
                         texto={"Concluído"}
-                        onPress={() => navigation.navigate('acompanharViagem', { showAppBar: true })}
+                        onPress={submitData}
                         estilo={styles.botaoContinuar}
                         estiloTexto={styles.botaoContinuarTexto}
                     />
-                </View>
+                </View>}
             </ScrollView>
             <BottomBar navigation={navigation} />
         </View>
@@ -212,20 +279,49 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFF",
     },
+    backdrop: {
+        ...StyleSheet.absoluteFill,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        height: 2000
+    },
+    backdropNone: {
+
+    },
+    modalView: {
+        flexDirection: "column",
+        alignItems: "center",
+        marginTop: 100,
+        paddingVertical: 100,
+        paddingHorizontal: 25,
+        height: 600,
+        shadowColor: "#000",
+        shadowOffset: 1,
+    },
     map: {
         width: "100%",
-        height: 400,
+        height: "100%",
     },
     centeredMarker: {
         position: 'absolute',
-        top: '50%',
+        top: '75%',
         left: '50%',
-        marginLeft: -24,
         marginTop: -48,
     },
     markerImage: {
-        width: 35,
-        height: 57,
+        width: 23,
+        height: 39,
+    },
+    botaoProntoModalGreen: {
+        backgroundColor: "#79C61E",
+        padding: 13,
+        paddingHorizontal: 30,
+        borderRadius: 10,
+        marginTop: 10,
+        width: 150,
+    },
+    botaoProntoModalTextoGreen: {
+        textAlign: 'center',
+        color: "#FFF",
     },
     viagem: {
         padding: 35,

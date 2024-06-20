@@ -62,6 +62,7 @@ exports.cadastro = async (req, res) => {
         companyData.userId = user._id;
         companyData.addressId = address._id;
         const vehicleData = JSON.parse(req.body.vehicleData);
+        vehicleData.userId = user._id;
 
         await addCompany(req, res, companyData);
 
