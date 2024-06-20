@@ -152,7 +152,7 @@ export function CadatroMotorista({ route, navigation }) {
         try {
             const response = await axios({
                 method: 'post',
-                url: `http://192.168.0.10:3000/user/cadastro`,
+                url: `${apiUrl}user/cadastro`,
                 data: formData,
                 headers: { 'Content-Type': 'multipart/form-data' }
             });

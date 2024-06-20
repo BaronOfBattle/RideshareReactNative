@@ -89,7 +89,7 @@ export function AnunciarViagem({ navigation }) {
             "userId": user._id
         };
         try {
-            const response = await fetch(`http://192.168.0.10:3000/tripDriver/cadastro`, {
+            const response = await fetch(`${apiUrl}tripDriver/cadastro`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

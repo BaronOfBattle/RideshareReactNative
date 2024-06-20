@@ -2,10 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from "react-native";
 import { UserContext } from "./UserContext";
 import { ViagemContext } from "./ViagensContext";
+import Constants from 'expo-constants';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
+
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
 
 export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar = true, home = true, }) {
     const { user } = useContext(UserContext);
@@ -20,7 +23,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     useEffect(() => {
         const fetchTripDriver = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripDriver/${user?._id}`);
+                const response = await fetch(`${apiUrl}tripDriver/${user?._id}`);
                 const data = await response.json();
                 setTripDriver(data.tripDrivers[0]);
             } catch (error) {
@@ -36,7 +39,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     useEffect(() => {
         const fetchTripSolicitation = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripDriver/solicitacoes/verificar/${tripDriver._id}`);
+                const response = await fetch(`${apiUrl}tripDriver/solicitacoes/verificar/${tripDriver._id}`);
                 const data = await response.json();
                 if (data.tripSolicitations) {
                     setSolicitacoes(data.tripSolicitations);
@@ -55,9 +58,9 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     useEffect(() => {
         const fetchFromAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${tripDriver[0]?.fromAddressId}`);
+                const response = await fetch(`${apiUrl}address/${tripDriver?.fromAddressId}`);
                 const data = await response.json();
-                setPartida(data);
+                setPartida(data.address);
             } catch (error) {
                 console.error('Erro ao buscar dados', error);
             }
@@ -66,14 +69,14 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
         if (!partida && tripDriver) {
             fetchFromAddress();
         }
-    }, [partida]);
+    }, [tripDriver]);
 
     useEffect(() => {
         const fetchToAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${tripDriver[0]?.destinationAddressId}`);
+                const response = await fetch(`${apiUrl}address/${tripDriver?.destinationAddressId}`);
                 const data = await response.json();
-                setDestino(data);
+                setDestino(data.address);
             } catch (error) {
                 console.error('Erro ao buscar dados', error);
             }
@@ -82,12 +85,12 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
         if (!destino && tripDriver) {
             fetchToAddress();
         }
-    }, [destino]);
+    }, [tripDriver]);
 
     useEffect(() => {
         const fetchTripPassengers = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripPassenger/${viagem?._id}`);
+                const response = await fetch(`${apiUrl}tripPassenger/${tripDriver?._id}`);
                 const data = await response.json();
                 setPassengers(data);
             } catch (error) {
@@ -95,10 +98,10 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
             }
         };
 
-        if (!passengers) {
+        if (!passengers  && tripDriver) {
             fetchTripPassengers();
         }
-    }, [passengers]);
+    }, [tripDriver]);
 
     const nome = 'João';
     const cargo = 'Professor';
@@ -128,10 +131,10 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                         <CustomText style={styles.topInfoTextTipoValor}>{tripDriver?.oneWay ? "IDA" : "IDA E VOLTA"} - R$ {tripDriver?.price}</CustomText>
                         <CustomText style={styles.midViagemTextoVagas}>VAGAS DISPONÍVEIS: {tripDriver?.availableSeats}</CustomText>
                         <CustomText style={styles.midViagemTextoHorario}>{tripDriver?.startTime}</CustomText>
-                        <CustomText style={styles.midViagemTextoPartida}>DE: {partida?.addresss?.street}</CustomText>
-                        <CustomText style={styles.midViagemTexto}>{partida?.addresss?.street}, {(partida?.addresss?.number) ? partida?.addresss?.number : "S/N"} — {partida?.addresss?.city}, {partida?.addresss?.state}</CustomText>
-                        <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.addresss?.street}</CustomText>
-                        <CustomText style={styles.midViagemTexto}>{destino?.addresss?.street}, {(destino?.addresss?.number) ? destino?.addresss?.number : "S/N"} — {destino?.addresss?.city}, {destino?.addresss?.state}</CustomText>
+                        <CustomText style={styles.midViagemTextoPartida}>DE: {partida?.street}</CustomText>
+                        <CustomText style={styles.midViagemTexto}>{partida?.street}, {(partida?.number) ? partida?.number : "S/N"} — {partida?.city}, {partida?.state}</CustomText>
+                        <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.street}</CustomText>
+                        <CustomText style={styles.midViagemTexto}>{destino?.street}, {(destino?.number) ? destino?.number : "S/N"} — {destino?.city}, {destino?.state}</CustomText>
                     </View>
                     <CustomText style={styles.tituloBottom}>{"SOLICITAÇÕES DE PASSAGEIROS"}</CustomText>
                 </ScrollView>

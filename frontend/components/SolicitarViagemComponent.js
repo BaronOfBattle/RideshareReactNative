@@ -76,7 +76,7 @@ export function SolicitarViagem({ navigation }) {
         };
 
         try {
-            const response = await fetch(`http://192.168.0.10:3000/tripPassenger/cadastro`, {
+            const response = await fetch(`${apiUrl}tripPassenger/cadastro`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

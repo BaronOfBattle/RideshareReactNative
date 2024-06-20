@@ -39,8 +39,8 @@ export function Inicio({ navigation }) {
     return (
         <View style={styles.container}>
             <AppBar imgPerfil={true} menu={true} />
-            <ScrollView>
-                { (user.userCategory === "2") && < View style={styles.tipoViagem}>
+            {(user.userCategory === "2") && <ScrollView>
+                {(user.userCategory === "2") && < View style={styles.tipoViagem}>
                     <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
                         onPress={() => { setpassageiroSelected(true), setmotoristaSelected(false) }}
                     >
@@ -116,10 +116,11 @@ export function Inicio({ navigation }) {
                             </View>
                         </View>
                     </View>}
-                {(((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
-                    <AcompanharViagem navigation={navigation} showAppBar={false} showBottomBar={false} home={false} />
-                }
             </ScrollView>
+            }
+            {(((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
+                <AcompanharViagem navigation={navigation} showAppBar={false} showBottomBar={false} home={false} />
+            }
             <BottomBar navigation={navigation} />
         </View >
     );

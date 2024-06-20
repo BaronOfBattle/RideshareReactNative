@@ -2,10 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import { UserContext } from "./UserContext";
 import { ViagemContext } from "./ViagensContext";
+import Constants from 'expo-constants';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import BotaoComponent from "./BotaoComponent";
 import BottomBar from "./BottomBarComponent";
+
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
 
 export function SolicitarCarona({ navigation }) {
     const { user } = useContext(UserContext);
@@ -24,7 +27,7 @@ export function SolicitarCarona({ navigation }) {
     useEffect(() => {
         const fetchCompany = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/company/user/${user?._id}`);
+                const response = await fetch(`${apiUrl}company/user/${user?._id}`);
                 const data = await response.json();
                 setCompany(data.company);
             } catch (error) {
@@ -40,7 +43,7 @@ export function SolicitarCarona({ navigation }) {
     useEffect(() => {
         const fetchFromAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.fromAddressId}`);
+                const response = await fetch(`${apiUrl}address/${viagem?.fromAddressId}`);
                 const data = await response.json();
                 setPartida(data);
             } catch (error) {
@@ -56,7 +59,7 @@ export function SolicitarCarona({ navigation }) {
     useEffect(() => {
         const fetchToAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.destinationAddressId}`);
+                const response = await fetch(`${apiUrl}address/${viagem?.destinationAddressId}`);
                 const data = await response.json();
                 setDestino(data);
             } catch (error) {
@@ -72,7 +75,7 @@ export function SolicitarCarona({ navigation }) {
     useEffect(() => {
         const fetchCarona = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripDriver/${viagem?._id}/${viagem?.destinationAddressId}`);
+                const response = await fetch(`${apiUrl}tripDriver/${viagem?._id}/${viagem?.destinationAddressId}`);
                 const data = await response.json();
                 const caronasWithAddresses = data.tripDrivers.map(tripDriver => ({
                     ...tripDriver,
@@ -97,7 +100,7 @@ export function SolicitarCarona({ navigation }) {
 
         (caronaSelecionada.availableSeats > 0) ? caronaSelecionada.availableSeats -= 1 : null;
         try {
-            const response = await fetch(`http://192.168.0.10:3000/tripDriver/update/${caronaSelecionada._id}`, {
+            const response = await fetch(`${apiUrl}tripDriver/update/${caronaSelecionada._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,7 +117,7 @@ export function SolicitarCarona({ navigation }) {
         }
 
         try {
-            const response = await fetch(`http://192.168.0.10:3000/tripPassenger/pedirCarona/${user._id}/${caronaSelecionada._id}`, {
+            const response = await fetch(`${apiUrl}tripPassenger/pedirCarona/${user._id}/${caronaSelecionada._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
