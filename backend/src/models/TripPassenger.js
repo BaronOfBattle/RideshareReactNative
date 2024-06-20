@@ -30,4 +30,14 @@ let TripPassenger = new Schema({
     collection: "tripPassenger"
 });
 
-module.exports = mongoose.model("TripPassenger", TripPassenger);
+TripPassenger.statics.findByUserId = function (userId) {
+    return this.find({ userId: userId, status: "Ativa" });
+};
+
+TripPassenger.statics.findByFromAddressIdOrFindByDestinationAddressId = function (fromAddressId, destinationAddressId) {
+    return this.find({ fromAddressId: fromAddressId, destinationAddressId: destinationAddressId, status: "Ativa" }).populate('destinationAddressId');
+};
+
+const TripPassengerModel = mongoose.model("TripPassenger", TripPassenger);
+
+module.exports = TripPassengerModel;

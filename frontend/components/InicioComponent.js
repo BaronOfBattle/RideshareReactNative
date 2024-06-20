@@ -1,23 +1,133 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput } from "react-native";
 import { UserContext } from "./UserContext";
+import { ViagemContext } from "./ViagensContext";
+import Constants from 'expo-constants';
 import AppBar from "./AppBarComponent";
 import { CustomText } from "./CustomTextComponent";
 import AcompanharViagem from "./AcompanharViagem";
+import BotaoComponent from "./BotaoComponent";
 import BottomBar from './BottomBarComponent';
+
+const apiUrl = Constants.manifest2.extra.expoClient.extra.apiUrl;
 
 export function Inicio({ navigation }) {
     const { user } = useContext(UserContext);
+    const { viagem } = useContext(ViagemContext);
     const [passageiroSelected, setpassageiroSelected] = useState(false);
     const [motoristaSelected, setmotoristaSelected] = useState(user.userCategory);
+    const [tripPassenger, setTripPassenger] = useState(null);
+    const [caronas, setCaronas] = useState([]);
+    const [isCaronaSelecionada, setIsCaronaSelecionada] = useState(false);
+    const [caronaSelecionada, setCaronaSelecionada] = useState(null);
 
     const [isIda, setIsIda] = useState(0);
     const titulo = ["IDA", "VOLTA", "IDA E VOLTA"];
 
+    useEffect(() => {
+        const fetchTripPassenger = async () => {
+            try {
+                const response = await fetch(`${apiUrl}tripPassenger/${user?._id}`);
+                const data = await response.json();
+                setTripPassenger(data.tripPassengers[0]);
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (user) {
+            fetchTripPassenger();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        const fetchCarona = async () => {
+            if (viagem) {
+                try {
+                    const response = await fetch(`${apiUrl}tripDriver/${viagem?._id}/${viagem?.destinationAddressId}`);
+                    const data = await response.json();
+                    const caronasWithDriversAndAddresses = data.tripDrivers.map(tripDriver => ({
+                        ...tripDriver,
+                        motoristas: data.drivers.filter(driver => driver._id === tripDriver.tripDriver.userId),
+                        enderecosFrom: data.addressesFrom.filter(address => address._id === tripDriver.tripDriver.fromAddressId),
+                        enderecosDestination: data.addressesDestination.filter(address => address._id === tripDriver.tripDriver.destinationAddressId)
+                    }));
+
+                    setCaronas(caronasWithDriversAndAddresses);
+                } catch (error) {
+                    console.error('Erro ao buscar dados', error);
+                }
+            } else {
+                try {
+                    const response = await fetch(`${apiUrl}tripDriver/${tripPassenger?._id}/${tripPassenger?.destinationAddressId}`);
+                    const data = await response.json();
+                    const caronasWithDriversAndAddresses = data.tripDrivers?.map(tripDriver => ({
+                        ...tripDriver,
+                        motoristas: data.drivers.filter(driver => driver._id === tripDriver.tripDriver.userId),
+                        veiculos: data.vehicles.filter(vehicle => vehicle.userId === tripDriver.tripDriver.userId),
+                        enderecosFrom: data.addressesFrom.filter(address => address._id === tripDriver.tripDriver.fromAddressId),
+                        enderecosDestination: data.addressesDestination.filter(address => address._id === tripDriver.tripDriver.destinationAddressId)
+                    }));
+                    setCaronas(caronasWithDriversAndAddresses);
+                } catch (error) {
+                    console.error('Erro ao buscar dados', error);
+                }
+
+            }
+        }
+
+        if (viagem || tripPassenger) {
+            fetchCarona();
+        }
+    }, [viagem, tripPassenger]);
+
+    const solicitarCarona = async () => {
+        if (caronaSelecionada?.availableSeats) {
+            (caronaSelecionada.availableSeats > 0) ? caronaSelecionada.availableSeats -= 1 : null;
+            try {
+                const response = await fetch(`${apiUrl}tripDriver/update/${caronaSelecionada?._id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(caronaSelecionada),
+                });
+                if (response.ok) {
+                } else {
+                    console.error("Failed to submit data:", response);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}tripPassenger/pedirCarona/${user._id}/${caronaSelecionada?._id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (response.ok) {
+                }
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    throw new Error(`Failed to submit data: ${errorBody}`);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        }
+
+    };
     const handleSetIsIda = () => {
         setIsIda((isIda + 1) % 3);
     }
 
+    const handleSelecionarCarona = (carona, key) => {
+        setCaronaSelecionada(carona);
+        setIsCaronaSelecionada(key);
+        solicitarCarona();
+    }
     const [isCarro, setIsCarro] = useState(true);
 
     const nome = 'João';
@@ -40,17 +150,22 @@ export function Inicio({ navigation }) {
         <View style={styles.container}>
             <AppBar imgPerfil={true} menu={true} />
             {(user.userCategory === "2") && <ScrollView>
-                {(user.userCategory === "2") && < View style={styles.tipoViagem}>
-                    <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
-                        onPress={() => { setpassageiroSelected(true), setmotoristaSelected(false) }}
-                    >
-                        <CustomText style={passageiroSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>PASSAGEIRO</CustomText></TouchableOpacity>
-                    <TouchableOpacity style={motoristaSelected ? styles.tipoViagemIdaVoltaGreen : styles.tipoViagemIdaVolta}
-                        onPress={() => { setmotoristaSelected(true), setpassageiroSelected(false) }}
-                    >
-                        <CustomText style={motoristaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>MOTORISTA</CustomText></TouchableOpacity>
-                </View>}
-                {(((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)) &&
+                {(user.userCategory === "2") &&
+                    <View style={styles.tipoViagem}>
+                        <TouchableOpacity style={passageiroSelected ? styles.tipoViagemIdaGreen : styles.tipoViagemIda}
+                            onPress={() => { setpassageiroSelected(true), setmotoristaSelected(false) }}
+                        >
+                            <CustomText style={passageiroSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>PASSAGEIRO</CustomText></TouchableOpacity>
+                        <TouchableOpacity style={motoristaSelected ? styles.tipoViagemIdaVoltaGreen : styles.tipoViagemIdaVolta}
+                            onPress={() => { setmotoristaSelected(true), setpassageiroSelected(false) }}
+                        >
+                            <CustomText style={motoristaSelected ? styles.tipoViagemIdaTextoGreen : styles.tipoViagemIdaTexto}>MOTORISTA</CustomText></TouchableOpacity>
+                    </View>}
+            </ScrollView>
+            }
+            {(((user.userCategory === "0")) || (user.userCategory === "2" && passageiroSelected)) &&
+                <ScrollView>
+
                     <View style={styles.passageiroView}>
                         <View style={styles.mid}>
                             <View style={styles.titulos}>
@@ -70,55 +185,107 @@ export function Inicio({ navigation }) {
                                     <CustomText style={!isCarro ? styles.titulo : styles.tituloDisabled}>MOTO</CustomText>
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.midViagem}>
-                                <View style={styles.infoNomeEFoto}>
-                                    <View>
-                                        <CustomText style={styles.infoTextNome}>{nome}</CustomText>
-                                        <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                                        <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
-                                        <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
-                                    </View>
-                                    <View style={styles.midMotoristaInfoImg}>
-                                        <TouchableOpacity>
-                                            <Image
-                                                source={require("../assets/fotoDocumento.jpg")}
-                                                style={styles.midMotoristaImage}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
+                            {tripPassenger ?
+                                <View>
+                                    {(caronas) ?
+                                        caronas?.map((carona, index) => (
+                                            ((carona?.veiculos[index]?.type === "Carro" || carona?.veiculos[index]?.type === "carro") && isCarro) ?
+                                                <View>
+                                                    <TouchableOpacity style={(isCaronaSelecionada === index) ? styles.midViagemBorderGreen : styles.midViagem} onPress={() => { (isCaronaSelecionada === index) ? setIsCaronaSelecionada(false) : handleSelecionarCarona(carona?.tripDriver, index) }}>
+
+                                                        <View>
+                                                            <React.Fragment key={index}>
+
+                                                                <View style={styles.infoNomeEFoto}>
+                                                                    <View>
+                                                                        <CustomText style={styles.infoTextNome}>{carona?.motoristas[index]?.fullName}</CustomText>
+                                                                        <CustomText style={styles.topInfoTextTipoValor}>{(carona?.tripDriver?.oneWay) ? "IDA" : "IDA E VOLTAS"} - R$ {carona.tripDriver.price}</CustomText>
+                                                                        <CustomText style={styles.infoTextCarro}>{carona?.veiculos[index]?.brand} {carona?.veiculos[index]?.model}</CustomText>
+                                                                        <CustomText style={styles.midViagemTextoHorario}>{carona?.tripDriver?.startTime}</CustomText>
+                                                                    </View>
+                                                                    <View style={styles.midMotoristaInfoImg}>
+                                                                        <TouchableOpacity>
+                                                                            <Image
+                                                                                source={{ uri: `${carona?.motoristas[index]?.profilePictureAddress}` }}
+                                                                                style={styles.midMotoristaImage}
+                                                                            />
+                                                                        </TouchableOpacity>
+                                                                    </View>
+                                                                </View>
+                                                                <CustomText style={styles.midViagemTextoPartida}>{carona?.enderecosFrom[index]?.street}</CustomText>
+                                                                <CustomText style={styles.midViagemTexto}>{carona?.enderecosFrom[index]?.street}, {(carona?.enderecosFrom[index]?.number) ? carona?.enderecosFrom[index]?.number : "S/N"} — {carona?.enderecosFrom[index]?.city}</CustomText>
+                                                                <CustomText style={styles.midViagemTextoDestino}>{carona?.enderecosDestination[index]?.street}</CustomText>
+                                                                <CustomText style={styles.midViagemTexto}>{carona?.enderecosDestination[index]?.street}, {(carona?.enderecosDestination[index]?.number) ? carona?.enderecosDestination[index]?.number : "S/N"} — {carona?.enderecosDestination[index]?.city}</CustomText>
+                                                            </React.Fragment>
+                                                        </View>
+                                                        {(isCaronaSelecionada === index) &&
+                                                            <BotaoComponent
+                                                                texto={"Solicitar carona"}
+                                                                onPress={() => { navigation.navigate("resumoViagem") }}
+                                                                estilo={styles.botaoSolicitarCarona}
+                                                                estiloTexto={styles.botaoTextoSolicitarCarona}
+                                                            />
+                                                        }
+                                                    </TouchableOpacity>
+                                                </View>
+                                                :
+                                                ((carona?.veiculos[index]?.type === "Moto" || carona?.veiculos[index]?.type === "moto") && isCarro) &&
+                                                <View>
+                                                    <TouchableOpacity style={(isCaronaSelecionada === index) ? styles.midViagemBorderGreen : styles.midViagem} onPress={() => { (isCaronaSelecionada === index) ? setIsCaronaSelecionada(false) : handleSelecionarCarona(index) }}>
+
+                                                        <View>
+                                                            <React.Fragment key={index}>
+
+                                                                <View style={styles.infoNomeEFoto}>
+                                                                    <View>
+                                                                        <CustomText style={styles.infoTextNome}>{carona?.motoristas[index]?.fullName}</CustomText>
+                                                                        <CustomText style={styles.topInfoTextTipoValor}>{(carona?.tripDriver?.oneWay) ? "IDA" : "IDA E VOLTAS"} - R$ {carona.tripDriver.price}</CustomText>
+                                                                        <CustomText style={styles.infoTextCarro}>{carona?.veiculos[index]?.brand} {carona?.veiculos[index]?.model}</CustomText>
+                                                                        <CustomText style={styles.midViagemTextoHorario}>{carona?.tripDriver?.startTime}</CustomText>
+                                                                    </View>
+                                                                    <View style={styles.midMotoristaInfoImg}>
+                                                                        <TouchableOpacity>
+                                                                            <Image
+                                                                                source={{ uri: `${carona?.motoristas[index]?.profilePictureAddress}` }}
+                                                                                style={styles.midMotoristaImage}
+                                                                            />
+                                                                        </TouchableOpacity>
+                                                                    </View>
+                                                                </View>
+                                                                <CustomText style={styles.midViagemTextoPartida}>{carona?.enderecosFrom[index]?.street}</CustomText>
+                                                                <CustomText style={styles.midViagemTexto}>{carona?.enderecosFrom[index]?.street}, {(carona?.enderecosFrom[index]?.number) ? carona?.enderecosFrom[index]?.number : "S/N"} — {carona?.enderecosFrom[index]?.city}</CustomText>
+                                                                <CustomText style={styles.midViagemTextoDestino}>{carona?.enderecosDestination[index]?.street}</CustomText>
+                                                                <CustomText style={styles.midViagemTexto}>{carona?.enderecosDestination[index]?.street}, {(carona?.enderecosDestination[index]?.number) ? carona?.enderecosDestination[index]?.number : "S/N"} — {carona?.enderecosDestination[index]?.city}</CustomText>
+                                                            </React.Fragment>
+                                                        </View>
+                                                        {(isCaronaSelecionada === index) &&
+                                                            <BotaoComponent
+                                                                texto={"Solicitar carona"}
+                                                                onPress={() => { navigation.navigate("resumoViagem") }}
+                                                                estilo={styles.botaoSolicitarCarona}
+                                                                estiloTexto={styles.botaoTextoSolicitarCarona}
+                                                            />
+                                                        }
+                                                    </TouchableOpacity>
+                                                </View>
+                                        ))
+                                        :
+                                        <View>
+                                            <CustomText style={{ textAlign: 'center', marginVertical: 15 }}>Não há motoristas com viagesn cadastradas!</CustomText>
+                                        </View>
+                                    } 
                                 </View>
-                                <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
-                                <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
-                                <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
-                                <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
-                            </View>
-                            <View style={styles.midViagem}>
-                                <View style={styles.infoNomeEFoto}>
-                                    <View>
-                                        <CustomText style={styles.infoTextNome}>Maria</CustomText>
-                                        <CustomText style={styles.topInfoTextTipoValor}>{tipoCarona} - R$ {valor}</CustomText>
-                                        <CustomText style={styles.infoTextCarro}>{marcaCarro} {modeloCarro}</CustomText>
-                                        <CustomText style={styles.midViagemTextoHorario}>{horaSaida}</CustomText>
-                                    </View>
-                                    <View style={styles.midMotoristaInfoImg}>
-                                        <TouchableOpacity>
-                                            <Image
-                                                source={require("../assets/fotoDocumento.jpg")}
-                                                style={styles.midMotoristaImage}
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
+                                :
+                                <View>
+                                    <CustomText style={{ textAlign: 'center', marginVertical: 15 }}>Você não possui nenhuma viagem cadastrada!</CustomText>
                                 </View>
-                                <CustomText style={styles.midViagemTextoPartida}>{enderecoPartida}</CustomText>
-                                <CustomText style={styles.midViagemTexto}>{enderecoPartidaEndereco}</CustomText>
-                                <CustomText style={styles.midViagemTextoDestino}>{enderecoDestino}</CustomText>
-                                <CustomText style={styles.midViagemTexto}>{enderecoDestinoEndereco}</CustomText>
-                            </View>
+                            }
                         </View>
-                    </View>}
-            </ScrollView>
+                    </View>
+                </ScrollView>
             }
-            {(((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
+            {
+                (((user.userCategory === "1")) || (user.userCategory === "2" && motoristaSelected)) &&
                 <AcompanharViagem navigation={navigation} showAppBar={false} showBottomBar={false} home={false} />
             }
             <BottomBar navigation={navigation} />
@@ -273,6 +440,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 30,
     },
+    midViagemBorderGreen: {
+        backgroundColor: "#EEE",
+        padding: 20,
+        borderRadius: 10,
+        borderWidth: 1.8,
+        borderColor: "#79c61e",
+        marginBottom: 30,
+    },
     midViagemTextoHorario: {
         fontSize: 16,
         marginTop: 3,
@@ -295,6 +470,15 @@ const styles = StyleSheet.create({
     midViagemTextoVagas: {
         fontSize: 13,
         fontFamily: 'Poppins',
+    },
+    botaoSolicitarCarona: {
+        backgroundColor: "#79C61E",
+        width: 170,
+        borderRadius: 12,
+    },
+    botaoTextoSolicitarCarona: {
+        marginHorizontal: 5,
+        color: "#000",
     },
     tituloBottom: {
         color: "#79c61e",

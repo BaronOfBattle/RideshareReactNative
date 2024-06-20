@@ -133,8 +133,6 @@ export function SolicitarCarona({ navigation }) {
         } catch (error) {
             console.error('Erro ao buscar dados', error);
         }
-
-
     };
 
     const handleSelecionarCarona = (key) => {

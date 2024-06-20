@@ -33,6 +33,10 @@ Vehicle.statics.findByUserId = function (userId) {
     return this.findOne({ userId: userId }).populate('userId');
 };
 
+Vehicle.statics.findByUserId = function (userId) {
+    return this.findOne({ userId: userId }).populate('userId');
+};
+
 const VehicleModel = mongoose.model("Vehicle", Vehicle);
 
 module.exports = VehicleModel;

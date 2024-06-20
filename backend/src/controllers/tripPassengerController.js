@@ -79,7 +79,7 @@ const getAllTripPassengers = async (req, res) => {
 
 const getTripPassenger = async (req, res) => {
     try {
-        const tripPassenger = await TripPassenger.findById(req.params.id);
+        const tripPassenger = await TripPassenger.findByUserId(req.params.id);
         res.status(200).json({ 'status': 'success', 'tripPassengers': tripPassenger });
     } catch (err) {
         res.status(400).send({ 'status': 'failure', 'mssg': 'Something went wrong', 'error': err.message });

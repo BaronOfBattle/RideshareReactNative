@@ -93,7 +93,24 @@ const getTripDriverByAddress = async (req, res) => {
     try {
         const routePassenger = await RouteTrip.findByTripPassenger(req.params.viagemId);
         const routeDrivers = await RouteTrip.findTripDriversByFromOrDestination(routePassenger[0].from, routePassenger[0].destination);
-        
+        if (!routeDrivers) {
+            res.status(200).send({ 'status': 'success', 'mssg': 'Sem caronas disponíveis' });
+        }
+    
+        let Users = [];
+        for (let key in routeDrivers) {
+            if (routeDrivers[key].tripDriver && routeDrivers[key].tripDriver.userId) {
+                Users[key] = await User.findById(routeDrivers[key].tripDriver.userId);
+            }
+        }
+
+        let Vehicles = [];
+        for (let key in routeDrivers) {
+            if (routeDrivers[key].tripDriver.vehicleType) {
+                Vehicles[key] = await Vehicle.findById(routeDrivers[key].tripDriver.vehicleType);
+            }
+        }
+
         let AddressTripDriverFrom = [];
         for (let key in routeDrivers) {
             if (routeDrivers[key].tripDriver && routeDrivers[key].tripDriver.fromAddressId) {
@@ -106,7 +123,7 @@ const getTripDriverByAddress = async (req, res) => {
                 AddressTripDriverDestination[key] = await Address.findById(routeDrivers[key].tripDriver.destinationAddressId);
             }
         }
-        res.status(200).json({ 'status': 'success', 'tripDrivers': routeDrivers, 'addressesFrom': AddressTripDriverFrom, "addressesDestination": AddressTripDriverDestination });
+        res.status(200).json({ 'status': 'success', 'tripDrivers': routeDrivers, 'drivers': Users, "vehicles": Vehicles, 'addressesFrom': AddressTripDriverFrom, "addressesDestination": AddressTripDriverDestination });
     } catch(err) {
         res.status(400).send({ 'status': 'failure', 'mssg': 'Something went wrong', 'error': err.message });
     }

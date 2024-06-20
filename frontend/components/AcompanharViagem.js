@@ -98,7 +98,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
             }
         };
 
-        if (!passengers  && tripDriver) {
+        if (!passengers && tripDriver) {
             fetchTripPassengers();
         }
     }, [tripDriver]);
@@ -111,8 +111,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     return (
         <View style={styles.container}>
             {showAppBar && <AppBar imgPerfil={true} menu={true} />}
-            <ScrollView>
-                {home &&
+            {home &&
                     <View style={styles.top}>
                         <BotaoComponent
                             texto={"INICIAR VIAGEM"}
@@ -121,13 +120,12 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                             estiloTexto={styles.solicitarCaronaTexto}
                         />
                     </View>
-                }
-            </ScrollView>
+            }
             <View style={styles.mid}>
                 <ScrollView>
 
-                    <CustomText style={styles.titulo}>{"ACOMPANHE SUA VIAGEM"}</CustomText>
-                    <View style={styles.midViagem}>
+                    <CustomText style={styles.titulo}>{(tripDriver) ? "ACOMPANHE SUA VIAGEM" : "INICIE UMA VIAGEM"}</CustomText>
+                    {tripDriver ? <View style={styles.midViagem}>
                         <CustomText style={styles.topInfoTextTipoValor}>{tripDriver?.oneWay ? "IDA" : "IDA E VOLTA"} - R$ {tripDriver?.price}</CustomText>
                         <CustomText style={styles.midViagemTextoVagas}>VAGAS DISPONÍVEIS: {tripDriver?.availableSeats}</CustomText>
                         <CustomText style={styles.midViagemTextoHorario}>{tripDriver?.startTime}</CustomText>
@@ -135,9 +133,20 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                         <CustomText style={styles.midViagemTexto}>{partida?.street}, {(partida?.number) ? partida?.number : "S/N"} — {partida?.city}, {partida?.state}</CustomText>
                         <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.street}</CustomText>
                         <CustomText style={styles.midViagemTexto}>{destino?.street}, {(destino?.number) ? destino?.number : "S/N"} — {destino?.city}, {destino?.state}</CustomText>
+                    </View> : <View style={styles.anunciarViagem}>
+                        <CustomText>Você não possui nenhuma viagem ativa.</CustomText>
+                        <CustomText>Inicie uma nova Viagem: </CustomText>
+                        <BotaoComponent
+                                    texto={"Iniciar nova viagem"}
+                                    onPress={() => { navigation.navigate("anunciarViagem") }}
+                                    estilo={styles.botaoAnunciarViagem}
+                                    estiloTexto={styles.botaoTextoAnunciarViagem}
+                                />
                     </View>
-                    <CustomText style={styles.tituloBottom}>{"SOLICITAÇÕES DE PASSAGEIROS"}</CustomText>
+                    }
                 </ScrollView>
+                    <CustomText style={styles.tituloBottom}>{tripDriver ? "SOLICITAÇÕES DE PASSAGEIROS" : null}</CustomText>
+                { tripDriver && 
                 <FlatList
                     data={solicitacoes}
                     keyExtractor={(item, index) => index.toString()}
@@ -172,7 +181,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                             </View>
                         </View>
                     )}
-                />
+                />}
             </View>
             {showBottomBar && <BottomBar navigation={navigation} />}
         </View>
@@ -241,6 +250,20 @@ const styles = StyleSheet.create({
     midViagemTextoVagas: {
         fontSize: 13,
         fontFamily: 'Poppins',
+    },
+    anunciarViagem: {
+        flexDirection: 'column',
+        alignItems: "center",
+        marginTop: 250
+    }, 
+    botaoAnunciarViagem: {
+        backgroundColor: "#79C61E",
+        width: 200,
+        borderRadius: 12,
+    }, 
+    botaoTextoAnunciarViagem: {
+        marginHorizontal: 5,
+        color: "#000",
     },
     tituloBottom: {
         color: "#79c61e",
