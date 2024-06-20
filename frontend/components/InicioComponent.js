@@ -15,7 +15,6 @@ export function Inicio({ navigation }) {
     const titulo = ["IDA", "VOLTA", "IDA E VOLTA"];
 
     const handleSetIsIda = () => {
-        console.log(user.userCategory);
         setIsIda((isIda + 1) % 3);
     }
 

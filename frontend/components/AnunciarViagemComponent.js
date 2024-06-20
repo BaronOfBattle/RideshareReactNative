@@ -39,8 +39,6 @@ export function AnunciarViagem({ navigation }) {
 
 
     const getLocation = async () => {
-        console.log("user");
-        console.log(user);
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
             alert('Permission to access location was denied');
@@ -81,7 +79,7 @@ export function AnunciarViagem({ navigation }) {
             tipoViagem.tipo = idaVoltaSelected;
         }
         const viagem = {
-            "fromAddresId": localPartida,
+            "fromAddressId": localPartida,
             "destinationAddressId": destino,
             "startTime": formattedSelectedTime,
             "availableSeats": vagasDisponiveis,
@@ -101,8 +99,6 @@ export function AnunciarViagem({ navigation }) {
 
             if (response.ok) {
                 const jsonResponse = await response.json();
-                console.log("Funcionou ou não?????");
-                console.log(jsonResponse);
                 setViagem(jsonResponse.data);
                 navigation.navigate('acompanharViagem', { showAppBar: true, viagem: jsonResponse.data });
             } else {
@@ -216,7 +212,6 @@ export function AnunciarViagem({ navigation }) {
                                     onChangeText={(text) => {
                                         const vagas = Number(text);
                                         setVagasDisponiveis(vagas);
-                                        console.log('Vagas disponíveis:', vagas);
                                     }}
 
                                 ></TextInput>

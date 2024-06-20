@@ -31,7 +31,6 @@ const CadastroCNH = ({ route, navigation }) => {
             quality: 1,
         });
 
-        console.log(result);
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);

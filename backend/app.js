@@ -24,6 +24,7 @@ const vehicleRoute = require("./src/routes/vehicleRoute");
 const addressRoute = require("./src/routes/addressRoute");
 
 const tripDriverRoute = require("./src/routes/tripDriverRoute");
+const tripPassengerRoute = require("./src/routes/tripPassengerRoute");
 
 app.use('/user', userRoute);
 app.use('/company', companyRoute);
@@ -31,6 +32,7 @@ app.use('/vehicle', vehicleRoute);
 app.use('/address', addressRoute);
 
 app.use('/tripDriver', tripDriverRoute);
+app.use('/tripPassenger', tripPassengerRoute);
 
 app.get("/", function(req, res) {
     res.send("<h1>Servidor rodando com ExpressJS</h1>");

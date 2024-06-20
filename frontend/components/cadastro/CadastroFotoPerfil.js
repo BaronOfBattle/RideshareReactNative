@@ -50,7 +50,6 @@ const FotoPerfil = ({ route, navigation }) => {
         if (image) {
             updatedUserDetails.fotoPerfil.data = image;
             updatedUserDetails.fotoPerfil.status = 'Etapa concluída';
-            console.log(updatedUserDetails);
             navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails, selectedOption: "fotoPerfil" });
         } else {
             alert("Por favor, selecione uma foto de perfil para continuar.");

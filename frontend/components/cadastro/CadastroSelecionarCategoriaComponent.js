@@ -22,7 +22,6 @@ export function SelecionarCategoria({ route, navigation }) {
 
 
     const handleContinue = () => {
-        console.log(updatedUserDetails);
         navigation.navigate("cadastroMotorista", { userDetails: updatedUserDetails });
     };
 

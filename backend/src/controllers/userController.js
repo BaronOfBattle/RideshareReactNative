@@ -37,7 +37,6 @@ async function saveImageToAzure(fileBuffer, filename) {
         blobContentDisposition: 'inline; filename="' + filename + '"'
     });
 
-    console.log(blobClient.url);
     return blobClient.url;
 }
 

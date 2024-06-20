@@ -10,7 +10,7 @@ let TripDriver = new Schema({
     startTime: {
         type: String
     }, 
-    fromAddresId: {
+    fromAddressId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Address'
     }, 
@@ -19,8 +19,7 @@ let TripDriver = new Schema({
         ref: 'Address'
     },
     vehicleType: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Vehicle"
+        type: String, 
     }, 
     price: {
         type: Number
@@ -40,4 +39,14 @@ let TripDriver = new Schema({
     collection: "tripDriver"
 });
 
-module.exports = mongoose.model("TripDriver", TripDriver);
+TripDriver.statics.findByUserId = function (userId) {
+    return this.find({ userId: userId, status: "Ativa" });
+};
+
+TripDriver.statics.findByFromAddressIdOrFindByDestinationAddressId = function (fromAddressId, destinationAddressId) {
+    return this.find({ fromAddressId: fromAddressId, destinationAddressId: destinationAddressId, status: "Ativa" }).populate('destinationAddressId');
+};
+
+const TripDriverModel = mongoose.model("TripDriver", TripDriver);
+
+module.exports = TripDriverModel;

@@ -11,12 +11,13 @@ let TripHistory = new Schema({
         type: Number
     }, 
     startTime: {
-        type: Date
+        type: Date, 
+        default: Date.now()
     }, 
     endTime: {
         type: Date
     }, 
-    fromAddresId: {
+    fromAddressId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Address'
     }, 

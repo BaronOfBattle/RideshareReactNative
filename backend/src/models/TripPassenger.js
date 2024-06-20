@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 
 let TripPassenger = new Schema({
     startTime: {
-        type: Date
+        type: String
     }, 
-    fromAddresId: {
+    fromAddressId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Address'
     }, 
@@ -16,13 +16,16 @@ let TripPassenger = new Schema({
         ref: 'Address'
     },
     vehicleType: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Vehicle"
+        type: String, 
     }, 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    }, 
+    status: {
+        type: String, 
+        default: "Ativa"
+    }, 
 }, {
     collection: "tripPassenger"
 });

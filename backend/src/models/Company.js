@@ -25,4 +25,11 @@ let Company = new Schema({
     collection: "company"
 });
 
-module.exports = mongoose.model("Company", Company);
+
+Company.statics.findByUserId = function (userId) {
+    return this.findOne({ userId: userId }).populate('userId');
+};
+
+const CompanyModel = mongoose.model("Company", Company);
+
+module.exports = CompanyModel;

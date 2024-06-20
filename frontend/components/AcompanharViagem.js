@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView } from "react-native";
 import { UserContext } from "./UserContext";
 import { ViagemContext } from "./ViagensContext";
 import AppBar from "./AppBarComponent";
@@ -13,29 +13,49 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     const [partida, setPartida] = useState(null);
     const [destino, setDestino] = useState(null);
     const [passengers, setPassengers] = useState(null);
+    const [solicitacoes, setSolicitacoes] = useState([]);
 
     const [tripDriver, setTripDriver] = useState(null);
 
     useEffect(() => {
         const fetchTripDriver = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripDriver/${viagem._id}`);
+                const response = await fetch(`http://192.168.0.10:3000/tripDriver/${user?._id}`);
                 const data = await response.json();
-                setTripDriver(data.tripDrivers);
+                setTripDriver(data.tripDrivers[0]);
             } catch (error) {
                 console.error('Erro ao buscar dados', error);
             }
         };
 
-        if (viagem) {
+        if (viagem || user) {
             fetchTripDriver();
         }
     }, [viagem]);
 
     useEffect(() => {
+        const fetchTripSolicitation = async () => {
+            try {
+                const response = await fetch(`http://192.168.0.10:3000/tripDriver/solicitacoes/verificar/${tripDriver._id}`);
+                const data = await response.json();
+                if (data.tripSolicitations) {
+                    setSolicitacoes(data.tripSolicitations);
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados', error);
+            }
+        };
+
+        if (solicitacoes.length === 0 && tripDriver) {
+            fetchTripSolicitation();
+        }
+    }, [tripDriver]);
+
+
+    useEffect(() => {
         const fetchFromAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.fromAddresId}`);
+                const response = await fetch(`http://192.168.0.10:3000/address/${tripDriver[0]?.fromAddressId}`);
                 const data = await response.json();
                 setPartida(data);
             } catch (error) {
@@ -43,7 +63,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
             }
         };
 
-        if (!partida) {
+        if (!partida && tripDriver) {
             fetchFromAddress();
         }
     }, [partida]);
@@ -51,7 +71,7 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
     useEffect(() => {
         const fetchToAddress = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/address/${viagem?.destinationAddressId}`);
+                const response = await fetch(`http://192.168.0.10:3000/address/${tripDriver[0]?.destinationAddressId}`);
                 const data = await response.json();
                 setDestino(data);
             } catch (error) {
@@ -59,15 +79,15 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
             }
         };
 
-        if (!destino) {
+        if (!destino && tripDriver) {
             fetchToAddress();
         }
     }, [destino]);
-    
+
     useEffect(() => {
         const fetchTripPassengers = async () => {
             try {
-                const response = await fetch(`http://192.168.0.10:3000/tripPassengers/${viagem?.fromAddresId}/${viagem.destinationAddressId}`);
+                const response = await fetch(`http://192.168.0.10:3000/tripPassenger/${viagem?._id}`);
                 const data = await response.json();
                 setPassengers(data);
             } catch (error) {
@@ -99,28 +119,36 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                         />
                     </View>
                 }
-                <View style={styles.mid}>
+            </ScrollView>
+            <View style={styles.mid}>
+                <ScrollView>
+
                     <CustomText style={styles.titulo}>{"ACOMPANHE SUA VIAGEM"}</CustomText>
-                        <View style={styles.midViagem}>
-                            <CustomText style={styles.topInfoTextTipoValor}>{viagem?.oneWay ? "IDA" : "IDA E VOLTA"} - R$ {viagem?.price}</CustomText>
-                            <CustomText style={styles.midViagemTextoVagas}>VAGAS OCUPADAS: {viagem?.availableSeats - 3}/{viagem?.availableSeats}</CustomText>
-                            <CustomText style={styles.midViagemTextoHorario}>{viagem?.startTime}</CustomText>
-                            <CustomText style={styles.midViagemTextoPartida}>DE: {partida?.addresss?.street}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{partida?.addresss?.street}, {(partida?.addresss?.number) ? partida?.addresss?.number : "S/N"} — {partida?.addresss?.city}, {partida?.addresss?.state}</CustomText>
-                            <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.addresss?.street}</CustomText>
-                            <CustomText style={styles.midViagemTexto}>{destino?.addresss?.street}, {(destino?.addresss?.number) ? destino?.addresss?.number : "S/N"} — {destino?.addresss?.city}, {destino?.addresss?.state}</CustomText>
-                        </View>
+                    <View style={styles.midViagem}>
+                        <CustomText style={styles.topInfoTextTipoValor}>{tripDriver?.oneWay ? "IDA" : "IDA E VOLTA"} - R$ {tripDriver?.price}</CustomText>
+                        <CustomText style={styles.midViagemTextoVagas}>VAGAS DISPONÍVEIS: {tripDriver?.availableSeats}</CustomText>
+                        <CustomText style={styles.midViagemTextoHorario}>{tripDriver?.startTime}</CustomText>
+                        <CustomText style={styles.midViagemTextoPartida}>DE: {partida?.addresss?.street}</CustomText>
+                        <CustomText style={styles.midViagemTexto}>{partida?.addresss?.street}, {(partida?.addresss?.number) ? partida?.addresss?.number : "S/N"} — {partida?.addresss?.city}, {partida?.addresss?.state}</CustomText>
+                        <CustomText style={styles.midViagemTextoDestino}>PARA: {destino?.addresss?.street}</CustomText>
+                        <CustomText style={styles.midViagemTexto}>{destino?.addresss?.street}, {(destino?.addresss?.number) ? destino?.addresss?.number : "S/N"} — {destino?.addresss?.city}, {destino?.addresss?.state}</CustomText>
+                    </View>
                     <CustomText style={styles.tituloBottom}>{"SOLICITAÇÕES DE PASSAGEIROS"}</CustomText>
-                        <View style={styles.midPassageiros}>
+                </ScrollView>
+                <FlatList
+                    data={solicitacoes}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <View style={[styles.midPassageiros, { marginBottom: 50, }]}>
                             <View style={styles.midPassageirosInfoImg}>
                                 <View style={styles.midPassageirosInfo}>
-                                    <CustomText style={styles.topInfoText}>{nome}</CustomText>
-                                    <CustomText style={styles.topInfoText}>{cargo} - {empresa}</CustomText>
+                                    <CustomText style={styles.topInfoText}>{item.userInfo}</CustomText>
+                                    <CustomText style={styles.topInfoText}>{item.company.position} - {item.company.name}</CustomText>
                                     <CustomText style={styles.topInfoText}>{avaliacao}</CustomText>
                                 </View>
                                 <TouchableOpacity>
                                     <Image
-                                        source={require("../assets/fotoDocumento.jpg")}
+                                        source={{ uri: `${item.userId.profilePictureAddress}` }}
                                         style={styles.midPassageirosImage}
                                     />
                                 </TouchableOpacity>
@@ -128,50 +156,22 @@ export function AcompanharViagem({ navigation, showAppBar = true, showBottomBar 
                             <View style={styles.continuar}>
                                 <BotaoComponent
                                     texto={"Recusar"}
-                                    onPress={() => { console.log("Recusou a solicitação de João") }}
+                                    onPress={() => { console.log("Recusou a solicitação de", item.userInfo) }}
                                     estilo={styles.botaoRecusar}
                                     estiloTexto={styles.botaoTexto}
                                 />
                                 <BotaoComponent
                                     texto={"Aceitar"}
-                                    onPress={() => { console.log("Aceitou a solicitação de João") }}
+                                    onPress={() => { console.log("Aceitou a solicitação de", item.userInfo) }}
                                     estilo={styles.botaoAceitar}
                                     estiloTexto={styles.botaoTexto}
                                 />
                             </View>
                         </View>
-                        <View style={[styles.midPassageiros, { marginTop: 25, marginBottom: 50, }]}>
-                            <View style={styles.midPassageirosInfoImg}>
-                                <View style={styles.midPassageirosInfo}>
-                                    <CustomText style={styles.topInfoText}>Maria</CustomText>
-                                    <CustomText style={styles.topInfoText}>PROFESSORA - FAC SENAC</CustomText>
-                                    <CustomText style={styles.topInfoText}>4.8</CustomText>
-                                </View>
-                                <TouchableOpacity>
-                                    <Image
-                                        source={require("../assets/fotoDocumento.jpg")}
-                                        style={styles.midPassageirosImage}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.continuar}>
-                                <BotaoComponent
-                                    texto={"Recusar"}
-                                    onPress={() => { console.log("Recusou a solicitação de Maria") }}
-                                    estilo={styles.botaoRecusar}
-                                    estiloTexto={styles.botaoTexto}
-                                />
-                                <BotaoComponent
-                                    texto={"Aceitar"}
-                                    onPress={() => { console.log("Aceitou a solicitação de Maria") }}
-                                    estilo={styles.botaoAceitar}
-                                    estiloTexto={styles.botaoTexto}
-                                />
-                            </View>
-                        </View>
-                </View>
-            </ScrollView>
-            { showBottomBar && <BottomBar navigation={navigation} />}
+                    )}
+                />
+            </View>
+            {showBottomBar && <BottomBar navigation={navigation} />}
         </View>
     );
 }
@@ -214,6 +214,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#EEE",
         padding: 20,
         borderRadius: 10,
+        marginBottom: 30
     },
     midViagemTextoHorario: {
         fontSize: 16,

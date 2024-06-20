@@ -79,9 +79,7 @@ export function CadatroMotorista({ route, navigation }) {
 
 
     const handleContinue = async () => {
-        console.log(userDetails);
         const formData = new FormData();
-        console.log(userDetails.fotoPerfil.data);
         formData.append('fotoPerfil', {
             uri: userDetails.fotoPerfil.data,
             type: 'image/jpeg',
@@ -160,7 +158,6 @@ export function CadatroMotorista({ route, navigation }) {
             });
             const userData = await response.data;
             if (response.status === 201) {
-                console.log(userData);
                 setUser(userData);
                 navigation.navigate("bemVindo");
             } else {
