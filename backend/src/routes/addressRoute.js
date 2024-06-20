@@ -16,8 +16,8 @@ addressRoute.route('/add').post(function (req, res) {
 
 
 addressRoute.route('/').get(function (req, res) {
-    Address.find().then(addresss => {
-        res.status(200).json({ 'status': 'success', 'addresss': addresss });
+    Address.find().then(address => {
+        res.status(200).json({ 'status': 'success', 'address': address });
     }).catch(err => {
         res.status(400).send({ 'status': 'failure', 'mssg': 'Something went wrong' });
     });
@@ -25,7 +25,7 @@ addressRoute.route('/').get(function (req, res) {
 
 addressRoute.route('/:id').get(function (req, res) {
     Address.findById(req.params.id).then(address => {
-        res.status(200).json({ 'status': 'success', 'addresss': address });
+        res.status(200).json({ 'status': 'success', 'address': address });
     }).catch(err => {
         res.status(400).send({ 'status': 'failure', 'mssg': 'Something went wrong' });
     });
